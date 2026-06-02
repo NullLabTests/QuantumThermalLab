@@ -1,0 +1,417 @@
+{
+  "package": "QTA submission v4",
+  "verdict": "BLOCKED now. CONDITIONAL after required hardware installation and measurements.",
+  "canonical_state": {
+    "total_gates": 63,
+    "PASS": 0,
+    "CONDITIONAL": 39,
+    "BLOCKED": 21,
+    "UNKNOWN": 2,
+    "DERIVED_CHECK": 1,
+    "tau_c_canonical_us": 292,
+    "all_can_PASS_now": "NO",
+    "all_measured_in_this_system": "false",
+    "full_cycle_MC_pass_rate": "0.0%",
+    "validated_system": "NOT AVAILABLE",
+    "breakthrough_claim": "NOT MADE"
+  },
+  "mode_separation": {
+    "mode_A": "Cryogenic Baseline / Stabilization",
+    "mode_B": "Material Processing / LCVD Growth (no sensing)",
+    "mode_C": "Isolation / Purge / Cryopump / Thermal Recovery",
+    "mode_D": "Quantum Sensing (NV / helium isotope)",
+    "mode_D_not_during_mode_B": true,
+    "architecture_evolution": "first iteration: cross-coupled simultaneous; current: mode-separated, interlocked"
+  },
+  "pass_history": [
+    {
+      "pass": 8,
+      "name": "shielding + mode-separation + MC parameter registry hardening",
+      "date": "2026-05-24",
+      "additions": "+6 gates (Shield-RAD/RF/OPT/MAG/CHEM + C_to_D_Readiness); +10 new files; +13 validation rows; +16 risk rows; +12 interface rows",
+      "gate_count_change": "56 -> 62 (+6 BLOCKED)"
+    },
+    {
+      "pass": 9,
+      "name": "final stale-clean patch",
+      "date": "2026-05-24",
+      "changes": "7 stale strings removed from 5 live docs; Step 8E patterns expanded; no physics/logic changed",
+      "gate_count_change": "none (62 unchanged)"
+    },
+    {
+      "pass": 10,
+      "name": "optional RTB/JT upstream cooling plant (DESIGN_OPTION only)",
+      "date": "2026-05-24",
+      "changes": "+1 gate (RTB_JT_OPTIONAL_COOLING_PLANT BLOCKED); +12 RTB/JT parameters; +7 R-RTB risks; +7 I069-I075 interfaces; +10 validation rows; no physics/MC/SNR/threshold logic changed",
+      "gate_count_change": "62 -> 63 (+1 BLOCKED)"
+    },
+    {
+      "pass": 11,
+      "name": "critical peer-review readiness strict canonicalization",
+      "date": "2026-05-24",
+      "changes": "canonical mode map A/B/C/D enforced; deleted source_audit.csv reference removed; 13 validation_matrix blank rows filled; MEASURED tags reclassified as MANUFACTURER_SPEC/PHYSICAL_CONSTANT; assumed_parameters metadata count recomputed; MC summary and tau_c sweep PASS columns renamed to forecast-explicit language; BOM dilution-refrigerator INSTALLED_UNVERIFIED -> DESIGN_SPECIFIED/forecast; checker Step 8F added (6 audits); no physics/MC/threshold logic changed",
+      "gate_count_change": "none (63 unchanged)"
+    },
+    {
+      "pass": 12,
+      "name": "strict mode-map canonicalization (sim internal state + manuscript table + content sweep)",
+      "date": "2026-05-24",
+      "changes": "sim internal state labels renamed from legacy uppercase tokens to MODE_A_BASELINE/MODE_B_PROCESS/MODE_C_PURGE/MODE_C_RECOOL/MODE_D_SENSE; manuscript Mode/Label/Description table rewritten with canonical descriptive labels (A=BASELINE/STABILIZATION, B=MATERIAL_PROCESSING/LCVD_GROWTH, C=ISOLATION_PURGE_THERMAL_RECOVERY, D=SENSING/MEASUREMENT); PDF recompiled; README.md three Mode-A-labeled section headers (LCVD STATUS, OPTICS, NON-MC THERMAL DUMP) renamed to Mode B; gate names that anchored LCVD/growth content to the wrong mode letter rewritten to reference Mode B Processing; CSV/JSON/MD content sweep across BOM, interface_map, risk_register, validation_matrix, source_gap_register, MC files, CLAIMS_BOUNDARY, assumed_parameters; stale 99/147 row counts updated to 111/157; checker Step 8E expanded with 18 new patterns; checker Step 8B made dynamic; raw grep over canonical package returns 0 obsolete-mode-map matches; NO physics/MC/threshold logic changed; gate count 63 unchanged",
+      "gate_count_change": "none (63 unchanged)"
+    },
+    {
+      "pass": 13,
+      "name": "BOM expansion \u2014 real-world validation/isolation hardware",
+      "date": "2026-05-25",
+      "changes": "Added 51 new BOM rows B081..B131 spanning mK thermometry, RF/MW/IR filtering, magnetic shielding, cryo-optics, Mode-B laser and pulse validation, UHV/gas/isotope verification, vibration/alignment, witness/validation artifacts, and an optional cryostat vendor option matrix. All new rows DESIGN_SPECIFIED or MANUFACTURER_SPEC_TARGET, forecast, can_support_PASS_now=NO. Corrected mode labels on B031/B032/B040/B041/B043/B061/B062/B069 to align with the canonical map. Set current_or_forecast=forecast on B017/B020/B059 (status=NOT_INSTALLED). README BOM row-count 70->121. Checker Step 8G added with 9 BOM consistency rules. No physics/MC/threshold logic changed; gate count 63 unchanged.",
+      "gate_count_change": "none (63 unchanged)",
+      "bom_count_change": "70 -> 121 (+51 validation/isolation entries)"
+    }
+  ],
+  "files": [
+    {
+      "filename": "qta_manuscript_v4.tex",
+      "size_bytes": 40713,
+      "sha256": "ef991ecbb58a0ca3bfb186352f5e2c809e0c78ffcd6928f65cc5da669f5ba4a8",
+      "generated_by": "manuscript",
+      "purpose": "manuscript source LaTeX"
+    },
+    {
+      "filename": "qta_manuscript_v4.pdf",
+      "size_bytes": 281050,
+      "sha256": "0c0acba1fc31bc78623a9e3faa166b7b93fbe5129a4444b89ec75663fdf717af",
+      "generated_by": "pdflatex",
+      "purpose": "manuscript PDF, compiled from .tex"
+    },
+    {
+      "filename": "qta_full_sim.py",
+      "size_bytes": 157291,
+      "sha256": "307a5fc4f95ced98219c26fb984e7a2b701a21ebe44c365ed3ad2a7ae68b570e",
+      "generated_by": "manual",
+      "purpose": "canonical generator \u2014 produces all gates and counts"
+    },
+    {
+      "filename": "results_gate_table.csv",
+      "size_bytes": 36551,
+      "sha256": "6da71b095af75b231e807fc1f2985c9ce5e0986c12332a1997ae34e76c059add",
+      "generated_by": "qta_full_sim.py",
+      "purpose": "canonical 63-gate table"
+    },
+    {
+      "filename": "monte_carlo_summary.csv",
+      "size_bytes": 1418,
+      "sha256": "f9c9c121ebc1f0c1aebbe836ec40cabe86d4c38241f24a84b5a69b82bf019806",
+      "generated_by": "qta_full_sim.py",
+      "purpose": "MC summary + canonical metric rows"
+    },
+    {
+      "filename": "assumed_parameters.json",
+      "size_bytes": 65812,
+      "sha256": "4c45864751641e85ea8b4464d365125ab49c4730f814b9c7a35b86722b662719",
+      "generated_by": "manual",
+      "purpose": "assumed/design parameter registry, 16-field schema"
+    },
+    {
+      "filename": "source_map.csv",
+      "size_bytes": 12749,
+      "sha256": "ce2d4f495c51cd515c61a5591b67044bb2b5115adaf1a0866cf5920704dec431",
+      "generated_by": "manual",
+      "purpose": "parameter-to-source mapping"
+    },
+    {
+      "filename": "validation_matrix.csv",
+      "size_bytes": 39299,
+      "sha256": "614b0361cc96e01bf8eb51b39c5936cd5caf8438fb976e28939cb511ea0385cc",
+      "generated_by": "manual",
+      "purpose": "validation requirements per item"
+    },
+    {
+      "filename": "risk_register.csv",
+      "size_bytes": 31634,
+      "sha256": "e11ce938c33d9652c978395a17dfeba77fa5f2c1a4d58d7ae2f8f97d0fc18cc0",
+      "generated_by": "manual",
+      "purpose": "100-row risk register (84 legacy numeric IDs + 16 named shielding/mode risks)"
+    },
+    {
+      "filename": "interface_map.csv",
+      "size_bytes": 32662,
+      "sha256": "e8ec0641804b554a9a9a765f23bb2384b122dfbe34018edea06359913ba15446",
+      "generated_by": "manual",
+      "purpose": "68-interface map (I001-I068)"
+    },
+    {
+      "filename": "interlock_table.csv",
+      "size_bytes": 1022,
+      "sha256": "6c5581f38d9d9939ba3c39e01045f6cfbc0476b4ddff206f24ec65e866c5de92",
+      "generated_by": "qta_full_sim.py",
+      "purpose": "hardware interlocks including IL-14"
+    },
+    {
+      "filename": "tau_c_sweep.csv",
+      "size_bytes": 1782,
+      "sha256": "05a51d8da55fcde26da85d49b5be8d50a60895e2d32792d6dc0549988d767c34",
+      "generated_by": "qta_full_sim.py",
+      "purpose": "tau_c sweep, canonical 292 us gate, 27.728 us = SUPERSEDED_V30"
+    },
+    {
+      "filename": "representative_source_audit.csv",
+      "size_bytes": 1807,
+      "sha256": "f2390b7c47d1483ca1e0dff7141d46d6a784625fc4bbf5626a6946b0b5abc4a3",
+      "generated_by": "manual",
+      "purpose": "REPRESENTATIVE_ONLY source audit (7 rows; not submission-complete)"
+    },
+    {
+      "filename": "package_consistency_check.py",
+      "size_bytes": 66089,
+      "sha256": "23b5d77cbcf1a4d907e014b78cd9571ff5b548ce2da45f67424d6655684d89be",
+      "generated_by": "manual",
+      "purpose": "independent verifier \u2014 reruns sim, compares all files"
+    },
+    {
+      "filename": "stale_language_audit.txt",
+      "size_bytes": 46190,
+      "sha256": "a1ef54fc44e5092f6bbd71ae6482f7a12e9a2e714715b196a0eb9acdb3e91f62",
+      "generated_by": "package_consistency_check.py / manual audit",
+      "purpose": "multi-line context audit"
+    },
+    {
+      "filename": "output_sync_report.txt",
+      "size_bytes": 41530,
+      "sha256": "6d66c24318d447e161de218e20512b953d2b2791548063b1051b147cfccfe11f",
+      "generated_by": "manual",
+      "purpose": "sync status of every canonical file"
+    },
+    {
+      "filename": "README.md",
+      "size_bytes": 19119,
+      "sha256": "acf7439c9c6429bf83a0ab9f197ba83b700583c518d472eeaf544ba32ffc8c01",
+      "generated_by": "manual",
+      "purpose": "package README \u2014 canonical state and instructions"
+    },
+    {
+      "filename": "BOM.csv",
+      "size_bytes": 52409,
+      "sha256": "64c2cbfc54a3ee8b54d6d4be51c2dd80a95fa11a30fd5f010d7cfd606b9e5a0a",
+      "generated_by": "manual",
+      "purpose": "BOM with anchoring columns; 0 Vespel"
+    },
+    {
+      "filename": "best_forecast_operating_point.json",
+      "size_bytes": 1132,
+      "sha256": "72ed482fba8ffcd7eec39579be23dc7c1c803a603ba0fafbcf05aa0bf0a07097",
+      "generated_by": "qta_full_sim.py",
+      "purpose": "forecast-only operating point, canonical tau_c=292 us"
+    },
+    {
+      "filename": "engineering_fixes.csv",
+      "size_bytes": 22643,
+      "sha256": "209f6c097448fbb2c3477d279c613986f28b540c1d7fa9cf64007988fa9c7421",
+      "generated_by": "qta_full_sim.py",
+      "purpose": "engineering fixes, sim-generated"
+    },
+    {
+      "filename": "failed_gate_samples.csv",
+      "size_bytes": 39557,
+      "sha256": "aaac8128a4b4979db7b6506262e4059878e47af27c8a3247d7466bbf0185dfbb",
+      "generated_by": "qta_full_sim.py",
+      "purpose": "failed gate samples from MC, sim-generated"
+    },
+    {
+      "filename": "hardware_registry.json",
+      "size_bytes": 6295,
+      "sha256": "77048534ac0b8d278462368b0018a07583a9379e3c12ab98516c86e72c26a30a",
+      "generated_by": "manual",
+      "purpose": "hardware registry"
+    },
+    {
+      "filename": "measured_parameters.json",
+      "size_bytes": 1918,
+      "sha256": "00d3cf7e5d192d39f29121467564f82c82ed94eb61bca0bca2df79d626f0e2f7",
+      "generated_by": "manual",
+      "purpose": "measured parameter registry (empty pending measurements)"
+    },
+    {
+      "filename": "parameter_registry.csv",
+      "size_bytes": 3167,
+      "sha256": "9c374795ec0cafb4ab78f4d73db200189ed90833beab4aa483ab94fb1ea35def",
+      "generated_by": "qta_full_sim.py",
+      "purpose": "parameter registry, sim-generated"
+    },
+    {
+      "filename": "rejected_baseline_BOM.csv",
+      "size_bytes": 1051,
+      "sha256": "2a9ee00f28891f16f09177a19baf6c14fae2ed8d4791aa56ab3836c0c6754f5b",
+      "generated_by": "manual",
+      "purpose": "rejected baseline (Vespel SP-22, AOM)"
+    },
+    {
+      "filename": "sim_stdout.txt",
+      "size_bytes": 73265,
+      "sha256": "94c1316d93b78507f1f698cbc57752569a545be2cb93ad359ab13c344ade5f0b",
+      "generated_by": "qta_full_sim.py",
+      "purpose": "captured stdout from sim run (for consistency check)"
+    },
+    {
+      "filename": "slop_removal_log.txt",
+      "size_bytes": 4093,
+      "sha256": "7c66e612d2ff48f4c674cf80a225619c5274b617a617aeabc44cd29636a61972",
+      "generated_by": "manual",
+      "purpose": "slop-removal audit log"
+    },
+    {
+      "filename": "source_audit_status.txt",
+      "size_bytes": 2166,
+      "sha256": "be80a35f983149ce0aa2b34e3ec74b3c3321d627451463ed11be1007162daffd",
+      "generated_by": "manual",
+      "purpose": "explicit representative-only status note"
+    },
+    {
+      "filename": "superseded_best_operating_point_v3.json",
+      "size_bytes": 1233,
+      "sha256": "f042e72c525f308e9b1d109c262ad201a679fe4b2e6a52ccbe4fbb08b4d876b3",
+      "generated_by": "manual",
+      "purpose": "QUARANTINED v3.0 operating point (SUPERSEDED)"
+    },
+    {
+      "filename": "REVIEWER_COVER_NOTE.md",
+      "size_bytes": 3295,
+      "sha256": "6f949c20108c10a9a4a6f79a06c80b770e7d07e75cba087119a6b3669adc7bf8",
+      "generated_by": "manual",
+      "purpose": "one-page cover note for outside technical reviewers"
+    },
+    {
+      "filename": "FIRST_VALIDATION_EXPERIMENTS.md",
+      "size_bytes": 7130,
+      "sha256": "a12ec909c80516963c5c5b05d89eca368f5cd2e9bae07267ea34308b90a08ce0",
+      "generated_by": "manual",
+      "purpose": "priority list of first experiments needed to evaluate the architecture"
+    },
+    {
+      "filename": "CLAIMS_BOUNDARY.md",
+      "size_bytes": 6866,
+      "sha256": "ddfb539126f74f4456c2594c20833437ff45e94a8267ba2c500aa8505b57bba6",
+      "generated_by": "manual",
+      "purpose": "explicit list of what the package does and does not claim"
+    },
+    {
+      "filename": "REVIEWER_QUESTIONS.md",
+      "size_bytes": 4350,
+      "sha256": "67dd6836071b773e60229e2cfa7044fff7e541183ad88d3484d91e2f321aa70c",
+      "generated_by": "manual",
+      "purpose": "eight specific technical questions for reviewer engagement"
+    },
+    {
+      "filename": "SUBMISSION_EMAIL_DRAFT.md",
+      "size_bytes": 2541,
+      "sha256": "628d42c69992ce0405d4b31cca0eb548fde60be3d4c920209247952f8d98c236",
+      "generated_by": "manual",
+      "purpose": "short request-for-feedback email template"
+    },
+    {
+      "filename": "bibliography_audit.csv",
+      "size_bytes": 13045,
+      "sha256": "b3ff2ddf91f03aec513537fd0e44f669f0a022e649913d11b0f92b5ff89cb77f",
+      "generated_by": "manual / source-hardening pass",
+      "purpose": "audit table of all 65 historical bibitems: 23 KEEP, 42 REMOVE_UNUSED"
+    },
+    {
+      "filename": "source_gap_register.csv",
+      "size_bytes": 31575,
+      "sha256": "0d3d6d882d050a37dea890c13bbfdfba86830191ec88323e596b6cbf07bc76c8",
+      "generated_by": "manual / source-hardening pass",
+      "purpose": "visible register of every unresolved source/citation gap (100 rows)"
+    },
+    {
+      "filename": ".gitattributes",
+      "size_bytes": 152,
+      "sha256": "f503bec1ff0b18fc4c4d52b95d3112632f61b61110f255a4dbe6cc92f1dcb8f7",
+      "generated_by": "manual",
+      "purpose": "disables Git EOL conversion so manifest hashes are stable across platforms"
+    },
+    {
+      "filename": ".gitignore",
+      "size_bytes": 28,
+      "sha256": "e60230a86f47059411b8f4bd46c892d4448a8f102abaabde4da302506fceabe4",
+      "generated_by": "manual",
+      "purpose": "excludes generated outputs and Python cache files"
+    },
+    {
+      "filename": "INSTALL.md",
+      "size_bytes": 2356,
+      "sha256": "2edb63a115687401632f4e8eac8d20235d1b873207f76d5fe1047fc4dbc4735f",
+      "generated_by": "manual",
+      "purpose": "External system dependencies and installation instructions"
+    },
+    {
+      "filename": "shielding_stack_register.csv",
+      "size_bytes": 6472,
+      "sha256": "0fc085e4e44169869dd4bc5668f8f404183d2dea1efb017d73d920c56bde9203",
+      "generated_by": "hardening",
+      "purpose": "Shielding stack register: 12 shield entries; all can_PASS_now=NO"
+    },
+    {
+      "filename": "radiation_rf_leakage_budget.csv",
+      "size_bytes": 3251,
+      "sha256": "323a03f2b1286c237e27fad8f8249f635cb9c5632e41cee85164375044b337ba",
+      "generated_by": "hardening",
+      "purpose": "9 leakage pathways; all BLOCKED until measured"
+    },
+    {
+      "filename": "optical_line_of_sight_audit.csv",
+      "size_bytes": 2702,
+      "sha256": "c1f5e348824199c031d9b372a0bdea7d1b1e04513004757bf42dce6f2f86f14a",
+      "generated_by": "hardening",
+      "purpose": "6 LOS paths; all BLOCKED until LOS audit performed"
+    },
+    {
+      "filename": "cryopanel_memory_model.csv",
+      "size_bytes": 2947,
+      "sha256": "8be4565e8b44a417dcbe20c90693bdd3c69bd33d8958c50071f64708f11dd1c0",
+      "generated_by": "hardening",
+      "purpose": "7 species cryopanel memory model; all BLOCKED"
+    },
+    {
+      "filename": "mode_transition_acceptance_tests.csv",
+      "size_bytes": 3454,
+      "sha256": "0dcc8b7f55a5ef0bb4e46fe699c78ce57d88502f87cdc105710f9b06dd29122c",
+      "generated_by": "hardening",
+      "purpose": "4 mode transitions; T-C2D BLOCKED with full sub-conditions"
+    },
+    {
+      "filename": "reviewer_attack_map.md",
+      "size_bytes": 6823,
+      "sha256": "2e3b32c2bbf4aad44b5eeaa3d0d8906d4d53bc18b8770b79e1f6b09a291f5853",
+      "generated_by": "hardening",
+      "purpose": "7 reviewer-attack sections; mode-separated architecture clarified"
+    },
+    {
+      "filename": "kill_gate_ranking.csv",
+      "size_bytes": 3919,
+      "sha256": "1bd4c87d20f9cb2be5a20079a0db6b693a93ed7766bb8bcd9a88cf359b4285cb",
+      "generated_by": "hardening",
+      "purpose": "13 ranked kill gates; tau_c and C_contr at top"
+    },
+    {
+      "filename": "monte_carlo_parameter_registry.csv",
+      "size_bytes": 23798,
+      "sha256": "2fed3b7c86b7fde06239fa13c361503597458a58949d628ad7c4576966f71419",
+      "generated_by": "mc-prep",
+      "purpose": "151 parameters categorized FIXED_DESIGN/ASSUMED_UNCERTAIN/MEASURED_REQUIRED/DERIVED/MODE_DEPENDENT"
+    },
+    {
+      "filename": "monte_carlo_gate_failure_rates.csv",
+      "size_bytes": 13798,
+      "sha256": "d46c53bac56220f94bf9d178d5600711d3745b863935fe0ebe8dacc074d12414",
+      "generated_by": "mc-prep",
+      "purpose": "62 gates with forecast failure rates; BLOCKED=100% measurement-not-present"
+    },
+    {
+      "filename": "monte_carlo_sensitivity_rankings.csv",
+      "size_bytes": 2562,
+      "sha256": "68006cd82dfe6ff65316b4a06b75c619103f5385caae7c7c0315f9d68bb2dbec",
+      "generated_by": "mc-prep",
+      "purpose": "13 ranked sensitivity parameters; forecast/sensitivity tool only"
+    }
+  ],
+  "self_hash_policy": "DETACHED MANIFEST HASHING. Two files are intentionally NOT listed in files[]: (1) final_manifest.json \u2014 cannot hash itself; (2) manifest_hash.txt \u2014 contains the SHA-256 of final_manifest.json, written after this manifest is finalized. manifest_hash.txt is therefore the detached, externally-verifiable record of the manifest's integrity. The package_consistency_check.py verifies that manifest_hash.txt matches the actual SHA-256 of final_manifest.json (Step 11). Files removed from the package this pass: README.txt (README.md is canonical); grep_report.txt (superseded by stale_language_audit.txt)."
+}

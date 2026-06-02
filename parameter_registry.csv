@@ -1,0 +1,50 @@
+name,value,unit,tag,source,modes,uncertainty
+T_fridge,0.01,K,MANUFACTURER_SPEC,Oxford Triton 200 (NOT installed in QTA),ABCD,+-0.5mK
+P_cool_MC,0.0002,W,MANUFACTURER_SPEC,Oxford Triton 200 (NOT installed in QTA),ABCD,+-20%
+P_cool_4K,1.5,W,MANUFACTURER_SPEC,Oxford Triton 200 (NOT installed in QTA),AB,+-20%
+T_4K_plate,4.0,K,MANUFACTURER_SPEC,Oxford Triton 200 (NOT installed in QTA),ABCD,+-0.1K
+gamma_NV,176086268233.70792,rad/s/T,PHYSICAL_CONSTANT,NIST CODATA gyromagnetic ratio,D,0.01%
+gamma_He3,203788832.2530627,rad/s/T,PHYSICAL_CONSTANT,NIST CODATA gyromagnetic ratio,D,0.01%
+alpha_K_Ag,2000.0,W/m2/K4,LITERATURE,Pobell 2007 A6.2,D,+-20%
+kappa_Kev_4K,0.04,W/m/K,LITERATURE,Rule 1996 Cryo.36:283,ABCD,+-20%
+kappa_G10_4K,0.0048,W/m/K,LITERATURE,Runyan 2008 Cryo.48:448,ABCD,+-20%
+f_th_NV,0.544,,LITERATURE,Doherty 2013,D,+-5%
+eta_QY_NV,0.7,,LITERATURE,Doherty 2013,D,+-10%
+F_abl_diamond,10000.0,J/m2,LITERATURE,Diamond lit.,D,+-50%
+s_H2_Cu_4K,0.3,,LITERATURE,Benvenuti 1999,B,+-50%
+G_sw_open,1e-08,W/K,LITERATURE,Al SC switch SC state; Pobell 2007,AB,factor 10x
+B_c_Al,0.01,T,LITERATURE,Al critical field 10mK,ACD,+-1mT
+P_H2_postbake,5e-12,Pa,ASSUMED,CERN Outgassing 2020,B,order mag
+G_eff,1e-05,W/K,ASSUMED,Design; Kapitza; NOT MEASURED,D,factor 10x
+G_eff_meas,,W/K,UNKNOWN,Step-response not done,D,blocks PASS
+A_sinter,,m2,UNKNOWN,45cm2 design; NOT FABRICATED,D,blocks PASS
+P_cond_wiring,2.46e-09,W,ASSUMED,NbTi/Cu wiring; not measured,D,+-50%
+eta_abs,0.05,,ASSUMED,NV absorption; NOT MEASURED,D,factor 3x
+E_pulse,5e-11,J,ASSUMED,Design,D,+-20%
+f_rep,200.0,Hz,ASSUMED,Design,D,+-factor2
+r_spot,3.61e-07,m,ASSUMED,SRIM/NA estimate,D,+-50%
+P_LCVD,0.05,W,ASSUMED,Typical LCVD spot,A,factor 3x
+P_mw,1e-09,W,ASSUMED,Design; not measured in cryo,D,+-factor2
+Z0_CPW,50.0,Ohm,DESIGN,Design,D,+-1Ohm
+w_CPW,5e-06,m,DESIGN,Design,D,+-1um
+d_NV,1e-08,m,ASSUMED,SRIM estimate; not measured,D,factor 2x
+T2s_bare,1e-05,s,ASSUMED,Literature; NOT this sample,D,factor 3x
+C_contr,0.1,,ASSUMED,NOT measured in cryo,D,blocks PASS G23
+eta_col,0.0635,,ASSUMED,Free-space chain; not calibrated,D,factor 3x
+dark_cps,250.0,cps,ASSUMED,Excelitas SPCM spec,D,+-50%
+tau_c,,s,UNKNOWN,PRIMARY BOTTLENECK; not measured,D,blocks PASS
+C_contr_10mK,,,UNKNOWN,Gate 23; not measured,D,blocks PASS
+RGA_P_CH4,,Pa,UNKNOWN,RGA not performed,B,blocks Mode B
+RGA_P_H2,,Pa,UNKNOWN,RGA not performed,B,blocks Mode B
+s_He,1.0,,ASSUMED,UNKNOWN for F-diamond; assume 1,D,blocks PASS
+E_b_He_kB,30.0,K,ASSUMED,He/graphite proxy; diamond unknown,D,factor 2x
+n_s_target,3.3e+18,m-2,ASSUMED,Design,D,+-50%
+P_CH4_work,0.0001,Pa,ASSUMED,Typical LCVD working pressure,A,factor 10x
+P_CH4_purge_tgt,5e-12,Pa,DESIGN,Required before He-3 dosing,B,criterion
+bakeout_done,0,,ASSUMED,Not yet executed,B,bool
+cryotrap_4K,0,,ASSUMED,Not yet installed,B,bool
+NEG_pump,0,,ASSUMED,Not yet installed,B,bool
+S_vib,1e-10,m2/Hz,ASSUMED,Oxford Triton spec; NOT measured here,CD,factor 10x
+t_growth,30.0,s,ASSUMED,Design growth pulse,A,+-factor3
+t_purge_min,7200.0,s,ASSUMED,Min pumpout; outgassing dominated,B,+0/-50%
+t_vib_settle,100.0,s,ASSUMED,Vib settling after shutter,C,+-factor3
