@@ -25,8 +25,8 @@ physically_demonstrated,false
 tau_c_canonical_threshold_us,292
 tau_c_superseded_v30_us,27.728
 tau_c_superseded_v30_status,SUPERSEDED NOT_CANONICAL NOT_LIVE_GATE_LOGIC
-Mode_A_LCVD_status,BLOCKED
-Mode_A_vs_Mode_D_optics,SEPARATED — Mode A uses A-vector; Mode D uses D-vector
+Mode_B_LCVD_status,BLOCKED
+Mode_B_vs_Mode_D_optics,SEPARATED — Mode B uses B-vector; Mode D uses D-vector
 IL14_helium_exclusion_interlock,NOT_INSTALLED
 LCVD_during_active_sensing,NOT_VIABLE NOT_CLAIMED
 same_chamber_mode_switched,PROPOSED not_demonstrated

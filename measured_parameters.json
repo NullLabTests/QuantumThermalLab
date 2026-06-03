@@ -33,11 +33,12 @@
     "value": 46.0,
     "unit": "dimensionless",
     "source": "Computed from gas kinetics: lambda/L_char = k_BT/(sqrt(2)*pi*d_He\u00b2*P) / 0.010m",
-    "status": "DERIVED from first principles (T=4K, P=1\u00b5Pa, d_He=2.6e-10m, L=10mm)",
+    "status": "DERIVED from first principles (T=4K, P=0.4 mPa (~4e-4 Pa), d_He=2.6e-10m, L=10mm)",
     "uncertainty": "<10% (d_He known to \u00b15%); molecular flow regime robust to factor 10 in P",
     "gates_affected": [
       "D9"
-    ]
+    ],
+    "note": "Kn=46 corresponds to dose pressure P~0.4 mPa (lambda~0.46 m at T=4 K, d_He=2.6e-10 m). Earlier annotation of 1 uPa was incorrect (1 uPa gives lambda~184 m, Kn~18000). Qualitative result unchanged: molecular flow, Kn>>10."
   },
   "dZFS_dT_rad_s_K": {
     "value": 464955.7127312894,

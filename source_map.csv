@@ -30,7 +30,7 @@ SM028,Cryo-baffle thermal load,Radiation load to sample,cryo_baffle_thermal_load
 SM029,Independent 3He line,Isolated dose line,independent_3He_line,,DESIGN,UNKNOWN,false,NOT_INSTALLED,Fabricate; leak-test; RGA-verify isolation,BOM B029 [directness normalized from REQUIRES_SOURCE: no source yet identified]
 SM030,Independent 4He line,Isolated reference line,independent_4He_line,,DESIGN,UNKNOWN,false,NOT_INSTALLED,Fabricate; leak-test,BOM B030 [directness normalized from REQUIRES_SOURCE: no source yet identified]
 SM031,Helium isotope purity,>99.9% target,isotope_purity_3He,Supplier spec,MANUFACTURER,MANUFACTURER_SPEC,false,DESIGN_SPECIFIED,Verify by RGA or mass-spec,
-SM032,CH4 process line,LCVD precursor delivery,CH4_process_line,,DESIGN,UNKNOWN,false,NOT_INSTALLED,Fabricate; verify Mode A isolation,BOM B031 [directness normalized from REQUIRES_SOURCE: no source yet identified]
+SM032,CH4 process line,LCVD precursor delivery,CH4_process_line,,DESIGN,UNKNOWN,false,NOT_INSTALLED,Fabricate; verify Mode B isolation,BOM B031 [directness normalized from REQUIRES_SOURCE: no source yet identified]
 SM033,Purge/pumpout path,Mode B inert purge + scroll pump,purge_line,,DESIGN,UNKNOWN,false,NOT_INSTALLED,Fabricate; test pumpout efficiency,BOM B032/B033 [directness normalized from REQUIRES_SOURCE: no source yet identified]
 SM034,Gas isolation leak rate,<1e-10 Pa m3/s target,gas_isolation_leak_rate,,DESIGN,REQUIRES_EXPERIMENT,false,UNVERIFIED,Leak test all gas lines,
 SM035,Optical absorption eta_abs,0.05 estimate,eta_abs,DohertyPhysRep2013,LITERATURE,INDIRECT,false,ASSUMED,Transmission/reflection at 532 nm,Order-of-magnitude only
@@ -54,7 +54,7 @@ SM052,Surface termination,F-termination via XeF2 or CF4 plasma,surface_terminati
 SM053,Helium mean free path,lambda=kT/(√2πd²P),helium_mean_free_path,Bird1994;Roth1990,TEXTBOOK,DIRECT,false,DERIVED,Gas kinetics DERIVED_CHECK,"λ=0.46 m at T=4K, P=1µPa"
 SM054,Knudsen number,Kn=lambda/L_char,Kn,Bird1994,TEXTBOOK,DIRECT,false,DERIVED,Gas kinetics DERIVED_CHECK,Kn=46 (molecular flow regime)
 SM055,Molecular flux,UNKNOWN,molecular_flux,,TBD,REQUIRES_EXPERIMENT,false,UNKNOWN,PMB flux calibration,
-SM056,LCVD precursor delivery,CH4 + fs laser,LCVD_precursor,,DESIGN,UNKNOWN,false,DESIGN_SPECIFIED,Develop LCVD process,Mode A; LCVD not demonstrated at 10 mK [directness normalized from REQUIRES_SOURCE: no source yet identified]
+SM056,LCVD precursor delivery,CH4 + fs laser,LCVD_precursor,,DESIGN,UNKNOWN,false,DESIGN_SPECIFIED,Develop LCVD process,Mode B; LCVD not demonstrated at 10 mK [directness normalized from REQUIRES_SOURCE: no source yet identified]
 SM057,LCVD process isolation,"Hardware interlock (IL-01, IL-02)",LCVD_process_isolation,,DESIGN,UNKNOWN,false,DESIGN_SPECIFIED,Install interlocks; test mode transitions,"BOM B032,B059,B070 [directness normalized from REQUIRES_SOURCE: no source yet identified]"
 SM058,LCVD surface damage,UNKNOWN at 10 mK,LCVD_surface_damage,,TBD,REQUIRES_EXPERIMENT,false,UNKNOWN,Test LCVD on dummy sample; XPS before/after,Risk: LCVD chemistry may destroy F-termination or NV layer
 SM059,C-13 diamond growth status,Not demonstrated,C13_diamond,,TBD,REQUIRES_EXPERIMENT,false,NOT_DEMONSTRATED,Separate development program,Quarantined as speculative future work; not part of current verdict

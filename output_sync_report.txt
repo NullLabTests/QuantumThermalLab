@@ -832,3 +832,109 @@ CANONICAL STATE (unchanged)
   After:  63 gates / 0 PASS / 39 CONDITIONAL / 21 BLOCKED / 2 UNKNOWN / 1 DERIVED_CHECK
 
 PHYSICS, EQUATIONS, GATE LOGIC, THRESHOLDS, MC LOGIC, CLAIMS: untouched.
+
+
+================================================================
+PASS 14 — external-review defect remediation — HISTORICAL CHANGE LOG ENTRY
+2026-06-03T19:14:01
+================================================================
+
+(HISTORICAL CHANGE LOG ENTRY. "Before:"/"After:" pairs document transitions.
+An external reviewer found six defects that the token-based checker missed.
+This pass fixes all six and adds semantic checks so they cannot recur. No
+physics, equations, gate logic, thresholds, MC logic, or claims changed.)
+
+ROOT CAUSE OF THE BIG MISS: the manuscript used the LaTeX non-breaking space
+"Mode~A" (tilde), and earlier passes searched only for "Mode A" (regular
+space). The token-based Step 8F also only matched literal uppercase strings
+like "Mode A = GROWTH"; the manuscript instead wrote "an LCVD-capable process
+mode (Mode~A)" and "Mode~A femtosecond laser for LCVD" -- functional usage
+with no GROWTH token. The fix adds a SEMANTIC check (Step 8H) that normalises
+LaTeX spacing and flags any "Mode A" paired with LCVD/growth/process terms.
+
+DEFECT #1 (most serious): manuscript used obsolete Mode~A = LCVD/growth
+  Before: 32 "Mode~A" instances in qta_manuscript_v4.tex meaning growth/LCVD/
+          laser/precursor/thermal-dump/helium-forbidden; abstract said
+          "process mode (Mode~A)"; section titled "Mode~A Cryogenic LCVD /
+          Surface-Processing"; body said "Mode~A and Mode~D cannot run
+          together" and "Modes~B and~C exist to isolate contamination".
+          The manuscript's own Mode/Label TABLE was already correct
+          (A=BASELINE, B=LCVD_GROWTH) -> internal self-contradiction.
+  After:  All 32 remapped. Growth/LCVD/laser/precursor/dump "Mode~A" -> "Mode~B".
+          Purge "Mode~B" -> "Mode~C". Exclusion sentence now "Mode~B and Mode~D
+          cannot run together. Mode~C exists to isolate contamination and allow
+          thermal recovery; Mode~A is the cryogenic baseline/stabilization
+          state." Section retitled "Mode~B Cryogenic LCVD / Surface-Processing".
+          \label{sec:mode_a_thermal_dump} -> sec:mode_b_thermal_dump (+ \ref).
+          PDF recompiled (0 pdflatex errors); pdftotext confirms.
+          Exactly one "Mode~A" remains: the baseline-state sentence (correct).
+
+DEFECT #2: obsolete convention leaked into support docs
+  Before: CLAIMS_BOUNDARY.md "helium exclusion during Mode A (IL-14)";
+          "cryobaffle / Mode A dump-stage option";
+          FIRST_VALIDATION_EXPERIMENTS.md "whether Mode A and Mode D can share
+          the same chamber" / "helium presence during Mode A";
+          README.md "Mode A and Mode D are mutually exclusive" (3 spots,
+          including a line-wrapped one and two table-cell descriptions).
+  After:  All remapped to Mode B (the LCVD/growth/helium-exclusion mode) or to
+          the correct "Mode B and Mode D are mutually exclusive" pair.
+
+DEFECT #3: README GLOBAL STATUS table internally contradictory
+  Before: GLOBAL STATUS row "BLOCKED count | 20" (table summed to 62); the
+          CANONICAL STATE table, INCLUDED FILES table, manifest canonical_state,
+          and the raw CSV all said 21.
+  After:  "BLOCKED count | 21"; GLOBAL STATUS table sums to 63.
+
+DEFECT #4: CLAIMS_BOUNDARY.md overstated bibliography ~3x
+  Before: "The manuscript bibliography contains 65 entries" (65 is the citation-
+          AUDIT row count: 23 KEEP + 42 REMOVE_UNUSED).
+  After:  "The manuscript bibliography contains 23 entries (65 considered in the
+          citation audit; 42 removed as uncited)". Manuscript has 23 \bibitem.
+
+DEFECT #5: measured_parameters.json Knudsen pressure annotation off ~400x
+  Before: Kn=46 "DERIVED from first principles (T=4K, P=1 uPa, ...)". At 1 uPa
+          lambda ~184 m -> Kn ~18,000. The value 46 (lambda=0.46 m) corresponds
+          to P ~0.4 mPa.
+  After:  "P=0.4 mPa (~4e-4 Pa)"; added note explaining the earlier 1 uPa
+          annotation was wrong and that the qualitative result (molecular flow,
+          Kn>>10) is unchanged.
+
+DEFECT #6: consistency checker printed a stale number in its own PASS message
+  Before: Step 8B logic computed the live count (157) correctly, but its PASS
+          string was hardcoded "validation_matrix.csv = 147 rows correct" and
+          the code comment said "canonical (147)".
+  After:  Comment generalised; PASS message is an f-string interpolating
+          {vm_actual}. Zero "147" literals remain in the checker.
+
+DATA-FILE FREE-TEXT SWEEP (the semantic check surfaced these)
+  Before: 46 standalone "Mode A"=growth references in cell text of BOM.csv,
+          interface_map.csv, risk_register.csv, validation_matrix.csv,
+          assumed_parameters.json, source_map.csv, source_gap_register.csv,
+          monte_carlo_parameter_registry.csv, plus sim-source strings flowing
+          into results_gate_table.csv and engineering_fixes.csv.
+  After:  All remapped (growth "Mode A" -> "Mode B"; purge "Mode B" -> "Mode C";
+          "Mode A <-> Mode B transition" -> "Mode B <-> Mode C transition").
+          Sim source fixed for the generated files (make_A() docstring clarified
+          as legacy-ID builder of Mode B gates; A1/A11 comments and fix text;
+          monte_carlo_summary metric keys Mode_A_LCVD_status -> Mode_B_LCVD_status,
+          Mode_A_vs_Mode_D_optics -> Mode_B_vs_Mode_D_optics). Sequence notation
+          (Mode A/B/C, Mode A->B) intentionally preserved: in those, A correctly
+          denotes the baseline first step.
+
+NEW / STRENGTHENED CHECKER STEPS
+  Step 8H (NEW): semantic mode-invariant. Normalises LaTeX spacing (Mode~A,
+    Mode\,A, Mode{A} -> "Mode A") and fails if any live doc pairs "Mode A"
+    with LCVD/growth/precursor/laser/process/dump terms within 60 chars, unless
+    the window also contains a baseline/stabilization term or the match is
+    sequence notation. This is the check that would have caught Defect #1.
+  Step 5 (STRENGTHENED): now fails if any "BLOCKED count | N" row != 21, and
+    if the GLOBAL STATUS table does not sum to 63 (previously only checked that
+    "21" appeared somewhere, so the contradicting "20" slipped through).
+  Bibliography check (NEW): fails if CLAIMS_BOUNDARY.md "manuscript bibliography
+    contains N entries" disagrees with the manuscript \bibitem count.
+
+CANONICAL STATE (unchanged)
+  Before: 63 gates / 0 PASS / 39 CONDITIONAL / 21 BLOCKED / 2 UNKNOWN / 1 DERIVED_CHECK
+  After:  63 gates / 0 PASS / 39 CONDITIONAL / 21 BLOCKED / 2 UNKNOWN / 1 DERIVED_CHECK
+
+PHYSICS, EQUATIONS, GATE LOGIC, THRESHOLDS, MC LOGIC, CLAIMS: untouched.

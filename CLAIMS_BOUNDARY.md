@@ -36,7 +36,7 @@ modesty.
   risk, unknown deposition yield, unknown local surface temperature
   during the deposition pulse, non-MC thermal dump requirements, thermal
   cycling acceptance criteria (N=100 engineering / N=1000 extended),
-  and helium exclusion during Mode A (IL-14).
+  and helium exclusion during Mode B processing (IL-14).
 
 ## Source audit status
 
@@ -46,7 +46,7 @@ The included source audit is REPRESENTATIVE_ONLY (7 rows from a
 numerical source audit remains incomplete. No citation upgrades any
 ASSUMED parameter to VERIFIED. Literature supports plausibility only.
 
-The manuscript bibliography contains 65 entries against an
+The manuscript bibliography contains 23 entries (65 considered in the citation audit; 42 removed as uncited) against an
 INCOMPLETE_DRAFT target of 100–200+. The manuscript is not in
 publication-ready form.
 
@@ -134,7 +134,7 @@ remain BLOCKED until in-system measurements exist.
 
 - "QTA may optionally include a 4-8 module RTB/JT-class upstream cooling plant."
 - "The baseline design option is 4 modules; the derated/redundant design option is 8 modules."
-- "RTB/JT is an upstream 4 K / shield / cryobaffle / Mode A dump-stage option."
+- "RTB/JT is an upstream 4 K / shield / cryobaffle / Mode B dump-stage option."
 - "RTB/JT is not a 10 mK cooling source and does not replace the dilution refrigerator."
 - "RTB/JT module count must be calculated from heat lift, derating, vibration, integration geometry, and vendor lift curves."
 - "All RTB/JT statuses remain DESIGN_OPTION / UNKNOWN / NOT_SELECTED / NOT_INSTALLED / NOT_VALIDATED."

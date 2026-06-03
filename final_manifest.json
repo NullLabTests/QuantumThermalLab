@@ -66,76 +66,83 @@
       "changes": "Added 51 new BOM rows B081..B131 spanning mK thermometry, RF/MW/IR filtering, magnetic shielding, cryo-optics, Mode-B laser and pulse validation, UHV/gas/isotope verification, vibration/alignment, witness/validation artifacts, and an optional cryostat vendor option matrix. All new rows DESIGN_SPECIFIED or MANUFACTURER_SPEC_TARGET, forecast, can_support_PASS_now=NO. Corrected mode labels on B031/B032/B040/B041/B043/B061/B062/B069 to align with the canonical map. Set current_or_forecast=forecast on B017/B020/B059 (status=NOT_INSTALLED). README BOM row-count 70->121. Checker Step 8G added with 9 BOM consistency rules. No physics/MC/threshold logic changed; gate count 63 unchanged.",
       "gate_count_change": "none (63 unchanged)",
       "bom_count_change": "70 -> 121 (+51 validation/isolation entries)"
+    },
+    {
+      "pass": 14,
+      "name": "external-review defect remediation (manuscript mode convention + 5 others)",
+      "date": "2026-06-03",
+      "changes": "Fixed 6 reviewer-found defects: (1) manuscript used the obsolete letter-to-process mode convention (growth mislabeled under the baseline letter) (LaTeX non-breaking space hid it from earlier passes) and contradicted its own mode table -- 32 Mode~A remapped, PDF recompiled; (2) Mode A leaks in CLAIMS_BOUNDARY/FIRST_VALIDATION/README fixed; (3) README GLOBAL STATUS BLOCKED 20->21 (table now sums to 63); (4) CLAIMS_BOUNDARY bibliography 65->23 (65 was the audit row count); (5) measured_parameters.json Knudsen pressure 1uPa->0.4mPa (~400x error); (6) checker Step 8B stale \"147\" PASS message -> f-string {vm_actual}. Swept 46 standalone obsolete-convention growth refs from data-file free text and sim source. Added Step 8H semantic mode-invariant (LaTeX-spacing-normalised), strengthened Step 5 (BLOCKED-count contradiction + GLOBAL STATUS sum), added bibliography-count check. No physics/MC/threshold logic changed; gate count 63 unchanged.",
+      "gate_count_change": "none (63 unchanged)"
     }
   ],
   "files": [
     {
       "filename": "qta_manuscript_v4.tex",
-      "size_bytes": 40713,
-      "sha256": "ef991ecbb58a0ca3bfb186352f5e2c809e0c78ffcd6928f65cc5da669f5ba4a8",
+      "size_bytes": 40838,
+      "sha256": "cc147843d91c9eb3e397481257be1d698b8e681602c6e77488b53f6765fafbc5",
       "generated_by": "manuscript",
       "purpose": "manuscript source LaTeX"
     },
     {
       "filename": "qta_manuscript_v4.pdf",
-      "size_bytes": 281050,
-      "sha256": "0c0acba1fc31bc78623a9e3faa166b7b93fbe5129a4444b89ec75663fdf717af",
+      "size_bytes": 281327,
+      "sha256": "c7cf397db425d8f5740210860b6f5862b590a7e486a6d4deb635ad95e791e63d",
       "generated_by": "pdflatex",
       "purpose": "manuscript PDF, compiled from .tex"
     },
     {
       "filename": "qta_full_sim.py",
-      "size_bytes": 157291,
-      "sha256": "307a5fc4f95ced98219c26fb984e7a2b701a21ebe44c365ed3ad2a7ae68b570e",
+      "size_bytes": 157451,
+      "sha256": "f8707cdd0105b268bda679e1a795af08e757a00f5cb7d40622c29df32cf11833",
       "generated_by": "manual",
       "purpose": "canonical generator \u2014 produces all gates and counts"
     },
     {
       "filename": "results_gate_table.csv",
       "size_bytes": 36551,
-      "sha256": "6da71b095af75b231e807fc1f2985c9ce5e0986c12332a1997ae34e76c059add",
+      "sha256": "784083e2a6108f6a92fd7e532ab5b07bc7db8d1fcd1112b1c5b987dd6619c4a0",
       "generated_by": "qta_full_sim.py",
       "purpose": "canonical 63-gate table"
     },
     {
       "filename": "monte_carlo_summary.csv",
       "size_bytes": 1418,
-      "sha256": "f9c9c121ebc1f0c1aebbe836ec40cabe86d4c38241f24a84b5a69b82bf019806",
+      "sha256": "8ffdd557fe298d62154d8bcac04aa6f983808f4cea6648f22ee6c73f80a5034d",
       "generated_by": "qta_full_sim.py",
       "purpose": "MC summary + canonical metric rows"
     },
     {
       "filename": "assumed_parameters.json",
       "size_bytes": 65812,
-      "sha256": "4c45864751641e85ea8b4464d365125ab49c4730f814b9c7a35b86722b662719",
+      "sha256": "50883c2699b82488da9ab6baecc92da3467f99c64d7835c55005cbc0e2d47806",
       "generated_by": "manual",
       "purpose": "assumed/design parameter registry, 16-field schema"
     },
     {
       "filename": "source_map.csv",
-      "size_bytes": 12749,
-      "sha256": "ce2d4f495c51cd515c61a5591b67044bb2b5115adaf1a0866cf5920704dec431",
+      "size_bytes": 12688,
+      "sha256": "46798d95b5ae92b67c164d25692c49ae25c50076e6544f2d50d9cadf4814b1cd",
       "generated_by": "manual",
       "purpose": "parameter-to-source mapping"
     },
     {
       "filename": "validation_matrix.csv",
-      "size_bytes": 39299,
-      "sha256": "614b0361cc96e01bf8eb51b39c5936cd5caf8438fb976e28939cb511ea0385cc",
+      "size_bytes": 39141,
+      "sha256": "74e0d367f9474922fa26cb38a4dee10fab36d59a099ce4c11456b17b22eac01c",
       "generated_by": "manual",
       "purpose": "validation requirements per item"
     },
     {
       "filename": "risk_register.csv",
-      "size_bytes": 31634,
-      "sha256": "e11ce938c33d9652c978395a17dfeba77fa5f2c1a4d58d7ae2f8f97d0fc18cc0",
+      "size_bytes": 31526,
+      "sha256": "af8f8e577840199550147770d7e236cff4cc01f332e45942ee3b85af45fb4cd7",
       "generated_by": "manual",
       "purpose": "100-row risk register (84 legacy numeric IDs + 16 named shielding/mode risks)"
     },
     {
       "filename": "interface_map.csv",
-      "size_bytes": 32662,
-      "sha256": "e8ec0641804b554a9a9a765f23bb2384b122dfbe34018edea06359913ba15446",
+      "size_bytes": 32586,
+      "sha256": "fc084b320a3b9fd4543fa22bc46a642c504d06b126f52b359c08c06ef4807c63",
       "generated_by": "manual",
       "purpose": "68-interface map (I001-I068)"
     },
@@ -162,8 +169,8 @@
     },
     {
       "filename": "package_consistency_check.py",
-      "size_bytes": 66089,
-      "sha256": "23b5d77cbcf1a4d907e014b78cd9571ff5b548ce2da45f67424d6655684d89be",
+      "size_bytes": 73333,
+      "sha256": "d5b25e19367a21f7189137fcefc1a557166aed4c1d032e0e811e783f0db283a5",
       "generated_by": "manual",
       "purpose": "independent verifier \u2014 reruns sim, compares all files"
     },
@@ -176,22 +183,22 @@
     },
     {
       "filename": "output_sync_report.txt",
-      "size_bytes": 41530,
-      "sha256": "6d66c24318d447e161de218e20512b953d2b2791548063b1051b147cfccfe11f",
+      "size_bytes": 48073,
+      "sha256": "3f946f29c8ae9c0a07e0e56de23f85bd603b0aabfe02af67a503248843cf82fa",
       "generated_by": "manual",
       "purpose": "sync status of every canonical file"
     },
     {
       "filename": "README.md",
       "size_bytes": 19119,
-      "sha256": "acf7439c9c6429bf83a0ab9f197ba83b700583c518d472eeaf544ba32ffc8c01",
+      "sha256": "1325f5109b23218149df41a3add4b6053b09e84f5520d0013e1da3c2c46f1991",
       "generated_by": "manual",
       "purpose": "package README \u2014 canonical state and instructions"
     },
     {
       "filename": "BOM.csv",
-      "size_bytes": 52409,
-      "sha256": "64c2cbfc54a3ee8b54d6d4be51c2dd80a95fa11a30fd5f010d7cfd606b9e5a0a",
+      "size_bytes": 52287,
+      "sha256": "00e5280fc5b5032613a65305884f5a249f20c777e46dbaa96f117d687ad15015",
       "generated_by": "manual",
       "purpose": "BOM with anchoring columns; 0 Vespel"
     },
@@ -205,7 +212,7 @@
     {
       "filename": "engineering_fixes.csv",
       "size_bytes": 22643,
-      "sha256": "209f6c097448fbb2c3477d279c613986f28b540c1d7fa9cf64007988fa9c7421",
+      "sha256": "87c90c417d8466bd3304568df40df283807ac4ac0c4cf71b95b71909042abf79",
       "generated_by": "qta_full_sim.py",
       "purpose": "engineering fixes, sim-generated"
     },
@@ -225,8 +232,8 @@
     },
     {
       "filename": "measured_parameters.json",
-      "size_bytes": 1918,
-      "sha256": "00d3cf7e5d192d39f29121467564f82c82ed94eb61bca0bca2df79d626f0e2f7",
+      "size_bytes": 2163,
+      "sha256": "ca689671105691429c86f259866d7ac2db575c8c367d96ca6e60aa5fa62e4b27",
       "generated_by": "manual",
       "purpose": "measured parameter registry (empty pending measurements)"
     },
@@ -247,7 +254,7 @@
     {
       "filename": "sim_stdout.txt",
       "size_bytes": 73265,
-      "sha256": "94c1316d93b78507f1f698cbc57752569a545be2cb93ad359ab13c344ade5f0b",
+      "sha256": "bc95a7424d917036c96034b4efec1b9354f74206b6d08b948dd55544a80b7d9f",
       "generated_by": "qta_full_sim.py",
       "purpose": "captured stdout from sim run (for consistency check)"
     },
@@ -282,14 +289,14 @@
     {
       "filename": "FIRST_VALIDATION_EXPERIMENTS.md",
       "size_bytes": 7130,
-      "sha256": "a12ec909c80516963c5c5b05d89eca368f5cd2e9bae07267ea34308b90a08ce0",
+      "sha256": "4a51f434108912d48f4a05f45285ce7baf8cc48a11aff15d4518f172d7550a6f",
       "generated_by": "manual",
       "purpose": "priority list of first experiments needed to evaluate the architecture"
     },
     {
       "filename": "CLAIMS_BOUNDARY.md",
-      "size_bytes": 6866,
-      "sha256": "ddfb539126f74f4456c2594c20833437ff45e94a8267ba2c500aa8505b57bba6",
+      "size_bytes": 6938,
+      "sha256": "b8db206bb95942a59677e85e547c5fab1169fe5a73b517e33a649c39debe79a0",
       "generated_by": "manual",
       "purpose": "explicit list of what the package does and does not claim"
     },
@@ -316,8 +323,8 @@
     },
     {
       "filename": "source_gap_register.csv",
-      "size_bytes": 31575,
-      "sha256": "0d3d6d882d050a37dea890c13bbfdfba86830191ec88323e596b6cbf07bc76c8",
+      "size_bytes": 31474,
+      "sha256": "36a279bedf164ec93aa78ef31bd77472dfa9ff439f62d6c2d2bffdcd9aacc7b3",
       "generated_by": "manual / source-hardening pass",
       "purpose": "visible register of every unresolved source/citation gap (100 rows)"
     },
@@ -393,8 +400,8 @@
     },
     {
       "filename": "monte_carlo_parameter_registry.csv",
-      "size_bytes": 23798,
-      "sha256": "2fed3b7c86b7fde06239fa13c361503597458a58949d628ad7c4576966f71419",
+      "size_bytes": 23646,
+      "sha256": "fff212755d3e8c1aaeaef90004dd4c95186317c1b8cd6707626a905a9414db3c",
       "generated_by": "mc-prep",
       "purpose": "151 parameters categorized FIXED_DESIGN/ASSUMED_UNCERTAIN/MEASURED_REQUIRED/DERIVED/MODE_DEPENDENT"
     },

@@ -9,7 +9,7 @@
     "cross_coupling_note": "Cross-coupling framework REMOVED. Live cross-coupling references renamed to mode-local secondary thermal feedback.",
     "mode_separation_note": "Mode B LCVD optics (E_pulse_A, f_rep_A, tau_pulse_A, spot_radius_A, eta_abs_A, precursor_species, deposition_yield_per_pulse_A, local_surface_temperature_A) are kept separate from Mode D NV readout optics (E_pulse_D, f_rep_D, eta_abs_D, T_peak_D, tau_recovery_D). Mode D gates D6/D7 use only the Mode D vector. Legacy gates A6 (Mode B processing)-A13 use only the Mode A vector. No gate mixes the two.",
     "IL14_note": "Hardware interlock IL-14: LCVD_on AND helium_film_present = IMPOSSIBLE. Gate A14: He-3/He-4 film absent before Mode B Processing.",
-    "rtb_jt_optional_cooling_plant_note": "RTB/JT is an optional upstream cooling plant only (4 K / shield / cryobaffle / Mode A dump). NOT a 10 mK cooler. NOT selected/installed/validated. Cannot unlock PASS. Baseline DESIGN_OPTION = 4 modules; redundant/derated DESIGN_OPTION = 8 modules.",
+    "rtb_jt_optional_cooling_plant_note": "RTB/JT is an optional upstream cooling plant only (4 K / shield / cryobaffle / Mode B dump). NOT a 10 mK cooler. NOT selected/installed/validated. Cannot unlock PASS. Baseline DESIGN_OPTION = 4 modules; redundant/derated DESIGN_OPTION = 8 modules.",
     "entry_count": 111,
     "entry_count_note": "Total parameter entries excluding _metadata = 111. Recomputed at write time; consistency checker verifies match."
   },
@@ -1480,7 +1480,7 @@
     "source": "TBD",
     "directness": "UNKNOWN",
     "uncertainty": "UNKNOWN",
-    "temperature_range": "Mode A operation",
+    "temperature_range": "Mode B operation",
     "material_system": "N/A",
     "measured_in_this_system": false,
     "gate_impact": "A8,A9",
@@ -1498,7 +1498,7 @@
     "source": "TBD",
     "directness": "UNKNOWN",
     "uncertainty": "UNKNOWN",
-    "temperature_range": "Mode A operation",
+    "temperature_range": "Mode B operation",
     "material_system": "N/A",
     "measured_in_this_system": false,
     "gate_impact": "A8,A9",
@@ -1516,7 +1516,7 @@
     "source": "TBD",
     "directness": "UNKNOWN",
     "uncertainty": "UNKNOWN",
-    "temperature_range": "Mode A operation",
+    "temperature_range": "Mode B operation",
     "material_system": "N/A",
     "measured_in_this_system": false,
     "gate_impact": "A8,A9",
@@ -1534,7 +1534,7 @@
     "source": "TBD",
     "directness": "UNKNOWN",
     "uncertainty": "UNKNOWN",
-    "temperature_range": "Mode A operation",
+    "temperature_range": "Mode B operation",
     "material_system": "N/A",
     "measured_in_this_system": false,
     "gate_impact": "A8,A9",
@@ -1552,7 +1552,7 @@
     "source": "TBD",
     "directness": "REQUIRES_EXPERIMENT",
     "uncertainty": "UNKNOWN",
-    "temperature_range": "Mode A operation",
+    "temperature_range": "Mode B operation",
     "material_system": "precursor + diamond surface",
     "measured_in_this_system": false,
     "gate_impact": "A8",
@@ -1588,7 +1588,7 @@
     "source": "TBD",
     "directness": "REQUIRES_EXPERIMENT",
     "uncertainty": "UNKNOWN",
-    "temperature_range": "Mode A operation",
+    "temperature_range": "Mode B operation",
     "material_system": "precursor + diamond surface",
     "measured_in_this_system": false,
     "gate_impact": "A9",
@@ -1606,7 +1606,7 @@
     "source": "TBD",
     "directness": "REQUIRES_EXPERIMENT",
     "uncertainty": "UNKNOWN",
-    "temperature_range": "Mode A operation",
+    "temperature_range": "Mode B operation",
     "material_system": "diamond surface",
     "measured_in_this_system": false,
     "gate_impact": "A8",
@@ -1624,14 +1624,14 @@
     "source": "TBD",
     "directness": "REQUIRES_EXPERIMENT",
     "uncertainty": "UNKNOWN",
-    "temperature_range": "Mode A operation",
+    "temperature_range": "Mode B operation",
     "material_system": "growth-stage carrier \u2194 1K/4K dump",
     "measured_in_this_system": false,
     "gate_impact": "A12",
     "fail_threshold": "TBD",
     "pass_threshold": "TBD",
     "required_validation": "Step-response per dump path",
-    "notes": "Mode A thermal dump (non-MC)."
+    "notes": "Mode B thermal dump (non-MC)."
   },
   "G_growth_to_MC_leak": {
     "name": "G_growth_to_MC_leak",
@@ -1642,14 +1642,14 @@
     "source": "TBD",
     "directness": "REQUIRES_EXPERIMENT",
     "uncertainty": "UNKNOWN",
-    "temperature_range": "Mode A operation",
+    "temperature_range": "Mode B operation",
     "material_system": "growth-stage \u2194 MC",
     "measured_in_this_system": false,
     "gate_impact": "A12",
     "fail_threshold": "TBD",
     "pass_threshold": "TBD",
     "required_validation": "Step-response with MC switch open and growth dump closed",
-    "notes": "Mode A thermal dump. Must be << P_cool_MC budget."
+    "notes": "Mode B thermal dump. Must be << P_cool_MC budget."
   },
   "E_pulse_D": {
     "name": "E_pulse_D",
@@ -1667,7 +1667,7 @@
     "fail_threshold": "TBD",
     "pass_threshold": "TBD",
     "required_validation": "Measure at sample post-install",
-    "notes": "Mode D NV readout pulse energy. Sim uses 50 pJ. Separate from Mode A E_pulse_A."
+    "notes": "Mode D NV readout pulse energy. Sim uses 50 pJ. Separate from Mode B E_pulse_A."
   },
   "f_rep_D": {
     "name": "f_rep_D",
@@ -1685,7 +1685,7 @@
     "fail_threshold": "TBD",
     "pass_threshold": "TBD",
     "required_validation": "Measure actual rep rate at sample",
-    "notes": "Mode D NV readout rep rate. Period = 5 ms. Separate from Mode A f_rep_A."
+    "notes": "Mode D NV readout rep rate. Period = 5 ms. Separate from Mode B f_rep_A."
   },
   "eta_abs_D": {
     "name": "eta_abs_D",
@@ -1703,7 +1703,7 @@
     "fail_threshold": "<0.01",
     "pass_threshold": ">0.01",
     "required_validation": "Transmission/reflection at 532 nm",
-    "notes": "Mode D NV readout absorption coefficient. Separate from Mode A eta_abs_A."
+    "notes": "Mode D NV readout absorption coefficient. Separate from Mode B eta_abs_A."
   },
   "T_peak_D": {
     "name": "T_peak_D",
@@ -1820,7 +1820,7 @@
     "affected_gates": "RTB_JT_OPTIONAL_COOLING_PLANT"
   },
   "RTB_JT_target_stage": {
-    "value": "4 K / shield / cryobaffle / Mode A dump stage",
+    "value": "4 K / shield / cryobaffle / Mode B dump stage",
     "unit": "N/A",
     "status": "DESIGN_OPTION",
     "measured_in_this_system": false,

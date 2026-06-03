@@ -604,7 +604,9 @@ class SystemState:
 
 
 def make_A():
-    """Mode A: Growth. Always physically constructible — no Mode B dependency."""
+    """Legacy make_A() builds Mode B (Material Processing / LCVD Growth) gates.
+    Gate IDs A1..A14 are legacy identifiers; "A" is a legacy ID prefix, NOT a
+    mode-letter reference. Always physically constructible."""
     s = SystemState("MODE_B_PROCESS", LCVD_on=True, precursor_on=True, cryotrap_active=True)
     s.validate()
     return s
@@ -715,7 +717,7 @@ def mode_B_processing_gates(s):
     assert s.mode == "MODE_B_PROCESS"
     gates = []
 
-    # A1: MC protected by SC switch during Mode A
+    # A1 (legacy ID): MC protected by SC switch during Mode B processing
     # SC switch: DESIGN_SPECIFIED. Not installed. Not tested cryogenically.
     sc_spec=True; sc_inst=False; sc_verif=False
     a1_status = gate_status_3layer(sc_spec, sc_inst, sc_verif, physics_ok=True)
@@ -812,7 +814,7 @@ def mode_B_processing_gates(s):
         "theta_contamination on sensing-zone coupon < TBD",
         "UNKNOWN", "TBD", "CONDITIONAL",
         "CONDITIONAL: cross-contamination path unmeasured. Sensing-zone coupon + RGA NOT_INSTALLED.",
-        "Install sensing-zone witness coupon. RGA after each Mode A run.", "%"))
+        "Install sensing-zone witness coupon. RGA after each Mode B run.", "%"))
 
     gates.append(Gate("A11", "Byproducts pump below RGA threshold before Mode D", "MODE_B_PROCESS",
         "P_species (RGA-corrected) < threshold for each byproduct species",
@@ -1658,7 +1660,7 @@ def engineering_readiness_gates():
 
     gates.append(_g(
         "RTB_JT_OPTIONAL_COOLING_PLANT",
-        "Optional 4-8 module RTB/JT-class upstream cooling plant (4 K / shield / cryobaffle / Mode A dump stage)",
+        "Optional 4-8 module RTB/JT-class upstream cooling plant (4 K / shield / cryobaffle / Mode B dump stage)",
         "MODE_A_BASELINE",
         "RTB_JT_selected=true AND RTB_JT_installed=true AND lift_curves_measured AND derated_lift_meets_required_W AND vibration<budget AND EMI<budget AND Mode_D_isolation_demonstrated",
         0, 1,
@@ -2102,8 +2104,8 @@ def main():
         w.writerow(["tau_c_canonical_threshold_us", "292"])
         w.writerow(["tau_c_superseded_v30_us", "27.728"])
         w.writerow(["tau_c_superseded_v30_status", "SUPERSEDED NOT_CANONICAL NOT_LIVE_GATE_LOGIC"])
-        w.writerow(["Mode_A_LCVD_status", "BLOCKED"])
-        w.writerow(["Mode_A_vs_Mode_D_optics", "SEPARATED — Mode A uses A-vector; Mode D uses D-vector"])
+        w.writerow(["Mode_B_LCVD_status", "BLOCKED"])
+        w.writerow(["Mode_B_vs_Mode_D_optics", "SEPARATED — Mode B uses B-vector; Mode D uses D-vector"])
         w.writerow(["IL14_helium_exclusion_interlock", "NOT_INSTALLED"])
         w.writerow(["LCVD_during_active_sensing", "NOT_VIABLE NOT_CLAIMED"])
         w.writerow(["same_chamber_mode_switched", "PROPOSED not_demonstrated"])
@@ -2344,7 +2346,7 @@ ENGINEERING_FIXES = [
      "CONDITIONAL until measured. A2 inequality satisfied under assumption of 1e-4 scatter fraction; not a PASS. Measurement required before A2 can become PASS.",
      "Instruments: calibrated photodiode at 4K stage (behind shutter) measuring residual 532nm scatter. "
      "Beam dump: blackened Cu cone at 4K (ε>0.99 at 532nm), area > 10× beam cross-section. "
-     "Measure: P_scatter/P_LCVD during Mode A; confirm < 1e-4 fraction reaching 4K stage. "
+     "Measure: P_scatter/P_LCVD during Mode B; confirm < 1e-4 fraction reaching 4K stage. "
      "Absorbers: carbon-loaded epoxy (Stycast 2850 with carbon black) on all interior cold surfaces in beam path. "
      "NOT on NV optical path — absorber on sensing region would block fluorescence.",
      "Scatter fraction varies with surface morphology after each LCVD cycle (carbon deposits change reflectivity); "
@@ -2478,7 +2480,7 @@ ENGINEERING_FIXES = [
 
     ("FD","Cold-Surface Memory / Desorption Accounting",
      "REQUIRED","NOT_INSTALLED",["B5","D10"],
-     "CONDITIONAL: shutters/baffles adsorb CH4 during Mode A; desorb during Mode C thermal cycling. "
+     "CONDITIONAL: shutters/baffles adsorb CH4 during Mode B; desorb during Mode C thermal cycling. "
      "Currently unmodelled contamination source.",
      "Heat shield surfaces >50K before closing sensing zone; cool in sequence warmest->coldest. "
      "Model adsorption capacity per surface and desorption rate.",

@@ -49,7 +49,7 @@ PASS count: 0.}
 \begin{abstract}
 % =============================================================================
 This work proposes a same-chamber, mode-separated cryogenic validation framework
-combining an LCVD-capable process mode (Mode~A) with NV-center-based helium
+combining an LCVD-capable process mode (Mode~B) with NV-center-based helium
 isotope sensing (Mode~D)~\cite{Pobell2007,DegenRMP2017}.
 \textbf{The framework is not experimentally validated.}
 The current state is \blocked{} because required hardware is not installed
@@ -142,9 +142,9 @@ D & SENSING/MEASUREMENT & LCVD off; precursor below threshold; He-3 dosed; NV OD
 \textbf{LCVD growth and NV sensing are not simultaneous.
 They occur as mutually exclusive, hardware-interlocked modes inside the same
 cryogenic chamber.}
-Mode~A and Mode~D cannot run together.
-Modes~B and~C exist to isolate contamination and thermal transients before
-Mode~D begins.
+Mode~B and Mode~D cannot run together.
+Mode~C exists to isolate contamination and allow thermal recovery before
+Mode~D begins; Mode~A is the cryogenic baseline/stabilization state.
 
 All mode transitions and interlocks are \designspec{} unless physically
 implemented and tested.
@@ -224,7 +224,7 @@ Margin $\approx 4\times10^4$ \assumed{} --- requires $G_\mathrm{eff}$ verificati
 Individual Mode~D load terms may exhibit mode-local secondary feedback
 (a higher $T_s$ increases $P_\mathrm{rad}$ and $P_\mathrm{He}$, closing a small perturbative loop).
 This is evaluated within Mode~D only.
-\textbf{No cross-mode thermal coupling between Mode~A LCVD loads and Mode~D loads occurs;
+\textbf{No cross-mode thermal coupling between Mode~B LCVD loads and Mode~D loads occurs;
 LCVD and sensing are temporally separated.}
 
 All thermal budget gates (\textsc{D3}, \textsc{D4}, \textsc{D5}): \conditional{}
@@ -263,8 +263,8 @@ Required isolation architecture \designspec{}:
 \begin{itemize}[noitemsep]
   \item Independent $^3$He sensing line (dedicated; no dead volume shared with CH$_4$)
   \item Independent $^4$He reference line (dedicated control)
-  \item CH$_4$ / LCVD precursor line (Mode~A only; isolated during Mode~D)
-  \item Pumpout / purge line (Mode~B operation)
+  \item CH$_4$ / LCVD precursor line (Mode~B only; isolated during Mode~D)
+  \item Pumpout / purge line (Mode~C operation)
   \item Line-specific shutoff valves, pressure gauges, and cryogenic-compatible hardware
   \item No backstreaming path from CH$_4$ to helium sensing lines
 \end{itemize}
@@ -376,12 +376,12 @@ Surface termination & F-terminated & \designspec{} & XPS + AFM post-termination 
 \end{center}
 
 % =============================================================================
-\section{Optical and Femtosecond Laser Constraints (Mode~A and Mode~D)}
+\section{Optical and Femtosecond Laser Constraints (Mode~B and Mode~D)}
 \label{sec:optical}
 % =============================================================================
 
 Two distinct optical uses:
-(1) Mode~A femtosecond laser for LCVD (proposed; \designspec{});
+(1) Mode~B femtosecond laser for LCVD (proposed; \designspec{});
 (2) Mode~D CW or pulsed laser for NV readout (proposed; \designspec{}).
 These are temporally separated.
 
@@ -447,13 +447,13 @@ confirmed by formula from standard references; \textbf{not} a physical system
 \textsc{Pass} (would require actual He-3 flow measurement in the built system).
 
 % =============================================================================
-\section{Mode~A Cryogenic LCVD / Surface-Processing Feasibility Limits}
+\section{Mode~B Cryogenic LCVD / Surface-Processing Feasibility Limits}
 \label{sec:lcvd}
 % =============================================================================
 
-Mode~A is a proposed pulsed surface-processing mode, not a demonstrated capability.
+Mode~B is a proposed pulsed surface-processing mode, not a demonstrated capability.
 It is mutually exclusive with Mode~D sensing by hardware interlock (IL-01, IL-02, IL-14).
-Helium is forbidden in Mode~A (Gate A14, IL-14).
+Helium is forbidden in Mode~B (Gate A14, IL-14).
 
 \subsection*{Gas-phase truth}
 Normal LCVD requires a gaseous or beam-delivered precursor at the reaction site.
@@ -461,14 +461,14 @@ At millikelvin substrate and shield temperatures, methane and other hydrocarbon
 precursors will \emph{cryocondense} on cold surfaces unless delivered through a
 controlled warm/differentially pumped molecular beam path. Therefore this work
 \textbf{does not claim conventional chamber-fill LCVD at 10\,mK}.
-Mode~A is a proposed pulsed, local, beam-fed surface-processing mode whose
+Mode~B is a proposed pulsed, local, beam-fed surface-processing mode whose
 deposition yield per pulse must be measured.
 
-\subsection*{Mode~A laser configuration (separate from Mode~D NV readout)}
-Mode~A LCVD laser parameters are \emph{not} the same as Mode~D NV readout
+\subsection*{Mode~B laser configuration (separate from Mode~D NV readout)}
+Mode~B LCVD laser parameters are \emph{not} the same as Mode~D NV readout
 parameters. The package configuration vectors are kept separate:
 \begin{itemize}[noitemsep]
-  \item \textbf{Mode~A LCVD optics}: $E_{\mathrm{pulse}}^A$ \designspec{},
+  \item \textbf{Mode~B LCVD optics}: $E_{\mathrm{pulse}}^A$ \designspec{},
         $f_{\mathrm{rep}}^A$ \designspec{}, $\tau_{\mathrm{pulse}}^A$ \designspec{},
         spot radius \designspec{}, $\eta_{\mathrm{abs}}^A$ \designspec{},
         precursor species \designspec{},
@@ -478,10 +478,10 @@ parameters. The package configuration vectors are kept separate:
         $f_{\mathrm{rep}}^D$ \designspec{}, $\eta_{\mathrm{abs}}^D$ \assumed{},
         $T_{\mathrm{peak}}^D$ \assumed{}, $\tau_{\mathrm{recovery}}^D$ \assumed{}.
 \end{itemize}
-Mode~D gates D6/D7 use only the Mode~D vector. Mode~A gates A6--A13 use only
-the Mode~A vector. The two vectors are never mixed in a single gate.
+Mode~D gates D6/D7 use only the Mode~D vector. Mode~B gates A6--A13 use only
+the Mode~B vector. The two vectors are never mixed in a single gate.
 
-\subsection*{Mode~A LCVD feasibility gates}
+\subsection*{Mode~B LCVD feasibility gates}
 \begin{itemize}[noitemsep]
   \item[A6] Precursor remains beam-delivered/gaseous until reaching the target;
         does not act as a chamber-filling gas. \conditional{} until measured.
@@ -495,18 +495,18 @@ the Mode~A vector. The two vectors are never mixed in a single gate.
         QCM / AFM / Raman / XPS. \blocked{} until measured.
   \item[A10] Growth-zone contamination does not reach sensing-zone coupon.
         \conditional{} until measured by witness coupon and RGA after each
-        Mode~A pulse train.
+        Mode~B pulse train.
   \item[A11] Byproducts and unreacted precursor pump below RGA thresholds
         \emph{before} Mode~D begins. \blocked{} until RGA is installed and
         all-species threshold is verified.
-  \item[A12] Mode~A heat is removed by a dedicated non-MC thermal dump path
-        (Section~\ref{sec:mode_a_thermal_dump}). \conditional{} until the
+  \item[A12] Mode~B heat is removed by a dedicated non-MC thermal dump path
+        (Section~\ref{sec:mode_b_thermal_dump}). \conditional{} until the
         dedicated dump switch and dump-stage temperature sensors are installed
         and the heat balance is measured.
-  \item[A13] Repeated Mode~A/B/C cycling passes fatigue and stress inspection
+  \item[A13] Repeated mode cycling (Mode~B processing $\rightarrow$ Mode~C recovery $\rightarrow$ Mode~D sensing) passes fatigue and stress inspection
         (Section~\ref{sec:cycling}). \conditional{} until $N=100$ qualification
         cycles are completed.
-  \item[A14] He-3 / He-4 film absent before Mode~A. \blocked{} until verified
+  \item[A14] He-3 / He-4 film absent before Mode~B. \blocked{} until verified
         in-situ by RGA, QCM, and pressure logging. Hardware interlock IL-14:
         \textsc{LCVD\_on} $\wedge$ \textsc{helium\_film\_present} = IMPOSSIBLE.
         Rationale: adsorbed or superfluid helium can wet surfaces, block
@@ -517,23 +517,23 @@ the Mode~A vector. The two vectors are never mixed in a single gate.
 None of A6--A14 may reach \textsc{Pass} from assumptions, simulation
 convergence, or literature; each requires measured in-system data.
 
-\subsection{Mode~A non-MC thermal dump architecture}
-\label{sec:mode_a_thermal_dump}
-The mixing chamber (MC) cannot remove Mode~A laser heat in real time. The
-proposed Mode~A thermal dump architecture is:
+\subsection{Mode~B non-MC thermal dump architecture}
+\label{sec:mode_b_thermal_dump}
+The mixing chamber (MC) cannot remove Mode~B laser heat in real time. The
+proposed Mode~B thermal dump architecture is:
 \begin{itemize}[noitemsep]
   \item \textbf{MC-protection switch}: superconducting heat switch held
-        \emph{open} during Mode~A so the MC is decoupled from the growth zone.
+        \emph{open} during Mode~B so the MC is decoupled from the growth zone.
   \item \textbf{Growth thermal dump switch}: an independent heat switch that
-        \emph{closes} during Mode~A and connects the growth-zone carrier to a
+        \emph{closes} during Mode~B and connects the growth-zone carrier to a
         1\,K or 4\,K dump stage (separate from the MC).
-  \item \textbf{Radiation shutter stack}: closed during Mode~A to protect the
+  \item \textbf{Radiation shutter stack}: closed during Mode~B to protect the
         10\,mK region from optical and IR radiation from the growth zone.
   \item \textbf{Temperature sensors}: independent calibrated thermometers on the
         growth-zone surface, sample bulk, MC, 1\,K stage, and 4\,K stage,
-        logged continuously during Mode~A.
+        logged continuously during Mode~B.
 \end{itemize}
-The minimal Mode~A thermal solve is
+The minimal Mode~B thermal solve is
 $T_{\mathrm{growth\_surface}}(t),\;T_{\mathrm{sample\_bulk}}(t),\;T_{\mathrm{MC}}(t)$
 driven by $P_{\mathrm{laser}}^A(t)$ and $P_{\mathrm{precursor}}^A(t)$ through
 $G_{\mathrm{growth\_to\_dump}}$ with parasitic $G_{\mathrm{growth\_to\_MC\_leak}}$.
@@ -541,7 +541,7 @@ The requirement is that the MC heat leak stays below the MC cooling budget
 ($\ll 200\,\mu$W) while the growth-zone heat is absorbed by the non-MC dump.
 This package does not assert that the 10\,mK MC removes LCVD heat in real time.
 All conductances $G_{\cdot}$ are \designspec{} and must be measured before
-Mode~A is run.
+Mode~B is run.
 
 \subsection{Thermal cycling, stress, and fatigue}
 \label{sec:cycling}
@@ -563,14 +563,14 @@ after $N=100$ cycles (first engineering qualification) and
 $N=1000$ cycles (extended qualification). Status remains \conditional{} until
 the package is physically cycled.
 
-\subsection*{Required Mode~A validation evidence}
+\subsection*{Required Mode~B validation evidence}
 Witness coupon + QCM + AFM + Raman + XPS + RGA records must be archived for
-\emph{every} Mode~A run. Mode~D is permitted to begin only after the witness
+\emph{every} Mode~B run. Mode~D is permitted to begin only after the witness
 coupon, RGA, and thermometric records demonstrate that A11 (byproduct removal),
 A10 (cross-contamination), A14 (helium-film absence), and A12 (thermal recovery)
 are satisfied.
 
-\textbf{Final Mode~A status: BLOCKED (hardware not installed) /
+\textbf{Final Mode~B status: BLOCKED (hardware not installed) /
 CONDITIONAL post-installation. LCVD at 10\,mK is not validated.}
 
 \subsection{Speculative material extensions (future work only)}

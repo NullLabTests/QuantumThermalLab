@@ -257,6 +257,32 @@ else:
     else:
         ok("README contains 63/0/39/21/2/1/292 and labels")
 
+    # Reviewer-driven: detect internal count contradictions. Every "BLOCKED count | N"
+    # row (GLOBAL STATUS table or elsewhere) must equal the canonical 21, and the
+    # GLOBAL STATUS table must sum to 63. Step 5 previously only checked that "21"
+    # appeared *somewhere*, so a contradicting "BLOCKED count | 20" slipped through.
+    blocked_count_rows = re.findall(r"BLOCKED count\s*\|\s*(\d+)", readme)
+    bad_blocked = [n for n in blocked_count_rows if n != "21"]
+    if bad_blocked:
+        fail("README BLOCKED count rows all equal canonical 21",
+             f"found BLOCKED count = {bad_blocked} (canonical = 21)")
+    else:
+        ok(f"README BLOCKED count rows all equal 21 ({len(blocked_count_rows)} row(s) checked)")
+
+    # GLOBAL STATUS table internal sum: PASS+BLOCKED+CONDITIONAL+UNKNOWN+DERIVED = 63
+    gs_pass = re.search(r"PASS count\s*\|\s*(\d+)", readme)
+    gs_blocked = re.search(r"BLOCKED count\s*\|\s*(\d+)", readme)
+    gs_cond = re.search(r"CONDITIONAL count\s*\|\s*(\d+)", readme)
+    gs_unknown = re.search(r"UNKNOWN count\s*\|\s*(\d+)", readme)
+    gs_derived = re.search(r"DERIVED(?:_CHECK)? count\s*\|\s*(\d+)", readme)
+    if all([gs_pass, gs_blocked, gs_cond, gs_unknown, gs_derived]):
+        gs_sum = sum(int(x.group(1)) for x in [gs_pass, gs_blocked, gs_cond, gs_unknown, gs_derived])
+        if gs_sum != 63:
+            fail("README GLOBAL STATUS table sums to 63",
+                 f"PASS+BLOCKED+CONDITIONAL+UNKNOWN+DERIVED = {gs_sum} (expected 63)")
+        else:
+            ok("README GLOBAL STATUS table sums to 63")
+
     forbidden = ["DARPA-ready","Nobel-worthy","proof of feasibility",
                  "validated system","breakthrough"]
     bad = []
@@ -550,7 +576,7 @@ if sas_path.exists():
     bad = []
     if re.search(r"^\s*Current file:\s*source_audit\.csv\s*$", sas_txt, re.M):
         bad.append("status says 'Current file: source_audit.csv' (deleted file)")
-    # Detect any validation_matrix.csv row count other than current canonical (147)
+    # Detect any validation_matrix.csv row count other than the live count (computed below)
     # Compute actual validation_matrix.csv row count at check time
     try:
         vm_actual = sum(1 for _ in csv.DictReader(open(PKG / "validation_matrix.csv")))
@@ -564,7 +590,7 @@ if sas_path.exists():
     if bad:
         fail("source_audit_status.txt free of stale phrases", "; ".join(bad))
     else:
-        ok("source_audit_status.txt: 'Current file: representative_source_audit.csv', validation_matrix.csv = 147 rows correct")
+        ok(f"source_audit_status.txt: 'Current file: representative_source_audit.csv', validation_matrix.csv = {vm_actual} rows correct")
 
 # 2) validation_matrix.csv: no row may reference deleted source_audit.csv
 #    (representative_source_audit.csv contains the substring; exclude that)
@@ -1307,6 +1333,112 @@ if bom_path.exists():
         ok(f"BOM.csv consistency: 0 problems (audited {len(bom_rows)} rows; "
            f"verified mode-map, forecast/status, required fields, validated/verified claims, row-count freshness)")
 
+
+# ===================== STEP 8H: semantic mode-invariant audit =====================
+print()
+print("Step 8H: semantic mode-invariant audit (Mode A must mean Baseline, not LCVD/growth)")
+print("-"*70)
+
+# Invariant: in the canonical map, Mode A = Cryogenic Baseline / Stabilization.
+# LCVD / growth / processing / process-laser / precursor / growth-heat-dump belong
+# to Mode B. So no live doc may associate "Mode A" with any of those concepts within
+# a short character window. This is the SEMANTIC check that complements Step 8F's
+# literal-token check: the manuscript wrote "an LCVD-capable process mode (Mode A)"
+# and "Mode A femtosecond laser for LCVD" -- functional usage with no "GROWTH" token.
+#
+# We normalise LaTeX spacing: Mode~A, Mode A, Mode\,A, Mode{A} all collapse to "Mode A".
+MODE_A_GROWTH_TERMS = [
+    "LCVD", "growth", "precursor", "femtosecond", "fs laser", "fs-laser",
+    "process laser", "process mode", "surface-processing", "surface processing",
+    "pulse train", "laser heat", "process heat", "dump-stage", "dump stage",
+    "thermal dump", "deposition", "CH$_4$", "CH4", "Surface-Processing",
+]
+# Concepts that legitimately pair with Mode A (baseline/stabilization) -> never flagged
+MODE_A_OK_TERMS = ["baseline", "stabiliz", "stabilis", "readiness", "set-point", "set point"]
+
+def _normalise_mode_spacing(text):
+    # Collapse LaTeX inter-word spacing variants between "Mode" and a letter.
+    text = re.sub(r"Mode\s*~\s*([A-D])", r"Mode \1", text)
+    text = re.sub(r"Mode\\,\s*([A-D])", r"Mode \1", text)
+    text = re.sub(r"Mode\{([A-D])\}", r"Mode \1", text)
+    text = re.sub(r"Mode\s+([A-D])", r"Mode \1", text)
+    return text
+
+SEMANTIC_LIVE_DOCS = [
+    "README.md", "REVIEWER_COVER_NOTE.md", "CLAIMS_BOUNDARY.md", "REVIEWER_QUESTIONS.md",
+    "SUBMISSION_EMAIL_DRAFT.md", "reviewer_attack_map.md", "FIRST_VALIDATION_EXPERIMENTS.md",
+    "qta_manuscript_v4.tex", "BOM.csv", "interface_map.csv", "risk_register.csv",
+    "validation_matrix.csv", "results_gate_table.csv", "assumed_parameters.json",
+    "measured_parameters.json", "source_gap_register.csv", "source_map.csv",
+    "monte_carlo_gate_failure_rates.csv", "monte_carlo_parameter_registry.csv",
+]
+
+WINDOW = 60  # characters on each side of "Mode A"
+semantic_hits = []
+for fn in SEMANTIC_LIVE_DOCS:
+    fp = PKG / fn
+    if not fp.exists():
+        continue
+    raw = fp.read_text(encoding="utf-8", errors="replace")
+    norm = _normalise_mode_spacing(raw)
+    for m_ in re.finditer(r"Mode A\b", norm):
+        s = max(0, m_.start() - WINDOW)
+        e = min(len(norm), m_.end() + WINDOW)
+        window = norm[s:e]
+        # Skip sequence notation where Mode A is the first element of an ordered list
+        # (Mode A/B/C, Mode A->B, Mode A+B, "Mode A and Mode B", "Mode A, B", "Mode A->B->C->D").
+        # In those, A correctly denotes the baseline first step, not the growth mode.
+        tail = norm[m_.end(): m_.end() + 12]
+        if re.match(r"\s*(?:/|->|\u2192|\+|,\s*[BCD]\b|\s+and\s+Mode\s+B|\s+and\s+B\b|/B|/C|/D)", tail):
+            continue
+        # Skip if a baseline/stabilization term is in-window (legitimate Mode A usage)
+        if any(ok.lower() in window.lower() for ok in MODE_A_OK_TERMS):
+            continue
+        # Skip explicit historical / superseded / forbidden-list contexts
+        if _is_historical_before_after(norm, m_.start(), m_.end()):
+            continue
+        if _is_superseded_block(norm, m_.start()):
+            continue
+        # Flag if any growth/LCVD/process term is in-window
+        hit_terms = [t for t in MODE_A_GROWTH_TERMS if t.lower() in window.lower()]
+        if hit_terms:
+            # Map normalised offset back to an approximate line number in raw text by
+            # counting newlines in the normalised string (spacing changes don't add lines)
+            ln = norm[:m_.start()].count("\n") + 1
+            semantic_hits.append((fn, ln, hit_terms[0], window.replace("\n", " ").strip()[:90]))
+
+if semantic_hits:
+    detail = "; ".join(f"{fn}:L{ln} 'Mode A'+'{term}' ({ctx})"
+                       for fn, ln, term, ctx in semantic_hits[:12])
+    fail("no live doc associates 'Mode A' with LCVD/growth/processing (semantic invariant)",
+         f"{len(semantic_hits)} semantic violations; first: {detail}")
+else:
+    ok(f"semantic mode-invariant holds: no live doc pairs 'Mode A' with LCVD/growth/process "
+       f"terms (audited {len(SEMANTIC_LIVE_DOCS)} files, LaTeX-spacing-normalised, "
+       f"{len(MODE_A_GROWTH_TERMS)} growth terms)")
+
+
+# ---- Bibliography-count consistency (reviewer-driven) ----
+# CLAIMS_BOUNDARY.md must not conflate the citation-audit row count (65) with the
+# manuscript bibitem count (23). The manuscript \bibitem count is the ground truth.
+tex_path = PKG / "qta_manuscript_v4.tex"
+cb_path = PKG / "CLAIMS_BOUNDARY.md"
+if tex_path.exists() and cb_path.exists():
+    tex_txt = tex_path.read_text(encoding="utf-8", errors="replace")
+    bibitem_count = len(re.findall(r"\\bibitem", tex_txt))
+    cb_txt = cb_path.read_text(encoding="utf-8", errors="replace")
+    bib_problem = None
+    for m_ in re.finditer(r"manuscript bibliography contains (\d+) entries", cb_txt):
+        stated = int(m_.group(1))
+        if bibitem_count and stated != bibitem_count:
+            bib_problem = (stated, bibitem_count)
+            break
+    if bib_problem:
+        fail("CLAIMS_BOUNDARY.md bibliography count matches manuscript bibitems",
+             f"CLAIMS_BOUNDARY says {bib_problem[0]} but manuscript has {bib_problem[1]} \\bibitem entries")
+    elif bibitem_count:
+        ok(f"CLAIMS_BOUNDARY.md bibliography count matches manuscript ({bibitem_count} bibitems)")
+
 # ===================== STEP 9: packaging cleanliness =========================
 print()
 print("Step 9: packaging — no nested ZIP / no stale duplicates")
@@ -1340,7 +1472,7 @@ if mc_path.exists():
     mc = {r["metric"]: r["value"] for r in csv.DictReader(open(mc_path))}
     required_keys = ["total_gates","PASS_count","CONDITIONAL_count","BLOCKED_count",
                      "UNKNOWN_count","DERIVED_CHECK_count","tau_c_canonical_threshold_us",
-                     "tau_c_superseded_v30_us","Mode_A_LCVD_status",
+                     "tau_c_superseded_v30_us","Mode_B_LCVD_status",
                      "IL14_helium_exclusion_interlock","global_verdict","forecast_only"]
     missing = [k for k in required_keys if k not in mc]
     if missing:

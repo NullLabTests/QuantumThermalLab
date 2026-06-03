@@ -229,7 +229,7 @@ B. POST-INSTALLATION FORECAST MC (HYPOTHETICAL — all hardware installed):
   [MODE_B_PROCESS] A10: Growth-zone contamination does not reach sensing zone  [CONDITIONAL]
     Eq:  theta_contamination on sensing-zone coupon < TBD
     Why: CONDITIONAL: cross-contamination path unmeasured. Sensing-zone coupon + RGA NOT_INSTALLED.
-    Fix: Install sensing-zone witness coupon. RGA after each Mode A run.
+    Fix: Install sensing-zone witness coupon. RGA after each Mode B run.
 
   [MODE_B_PROCESS] A11: Byproducts pump below RGA threshold before Mode D  [BLOCKED]
     Eq:  P_species (RGA-corrected) < threshold for each byproduct species
@@ -491,7 +491,7 @@ B. POST-INSTALLATION FORECAST MC (HYPOTHETICAL — all hardware installed):
     Why: SPECIFIED:No  INSTALLED:No  VERIFIED:No. Status=BLOCKED. Composite mode-transition gate. None of the Mode C readiness sub-conditions (see mode_transition_acceptance_tests.csv row T-C2D) has been measured. Architecture is
     Fix: Execute T-C2D coordinated measurement: thermal + vacuum + RGA + QCM + coupon + radiation + RF + LOS + vibration + NV ODMR/Ramsey baseline.
 
-  [MODE_A_BASELINE] RTB_JT_OPTIONAL_COOLING_PLANT: Optional 4-8 module RTB/JT-class upstream cooling plant (4 K / shield / cryobaffle / Mode A dump stage)  [BLOCKED]
+  [MODE_A_BASELINE] RTB_JT_OPTIONAL_COOLING_PLANT: Optional 4-8 module RTB/JT-class upstream cooling plant (4 K / shield / cryobaffle / Mode B dump stage)  [BLOCKED]
     Eq:  RTB_JT_selected=true AND RTB_JT_installed=true AND lift_curves_measured AND derated_lift_meets_required_W AND vibration<budget AND EMI<budget AND Mode_D_isolation_demonstrated
     Why: SPECIFIED:No  INSTALLED:No  VERIFIED:No. Status=BLOCKED. Optional upstream cooling plant. Baseline DESIGN_OPTION = 4 modules; redundant/derated DESIGN_OPTION = 8 modules. Not a 10 mK cooler and not a replacement for the 
     Fix: (1) Obtain vendor lift curves at target stage temperatures. (2) Compute N_modules = ceil((P_ModeA_dump + P_parasitic + P_margin) * safety_factor / P_lift_per_mo
@@ -840,7 +840,7 @@ DETAILED FIX DESCRIPTIONS:
 
   [FD] Cold-Surface Memory / Desorption Accounting  [REQUIRED] [NOT_INSTALLED]
     Gates: B5, D10
-    Gate delta: CONDITIONAL: shutters/baffles adsorb CH4 during Mode A; desorb during Mode C thermal cycling. Currently unmodelled contamination source.
+    Gate delta: CONDITIONAL: shutters/baffles adsorb CH4 during Mode B; desorb during Mode C thermal cycling. Currently unmodelled contamination source.
     Implementation: Heat shield surfaces >50K before closing sensing zone; cool in sequence warmest->coldest. Model adsorption capacity per surface and desorption rate.
     New failure modes: Desorption timing uncertain; may require extended Mode B for surface equilibration.
 

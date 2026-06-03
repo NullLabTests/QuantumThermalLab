@@ -114,7 +114,7 @@ performed and reported.
 
 - **Purpose**: test whether the proposed mode-switched architecture can
   actually achieve sufficient growth-zone to sensing-zone isolation
-  during dosing, purge, and recool — i.e. whether Mode A and Mode D can
+  during dosing, purge, and recool — i.e. whether Mode B and Mode D can
   share the same chamber without cross-contamination corrupting Mode D
   measurements.
 - **Required measurement**: witness coupon characterisation (AFM, Raman,
@@ -126,7 +126,7 @@ performed and reported.
 - **Advance result**: sensing-zone witness coupon and RGA indistinguishable
   from a clean baseline after the cycle.
 - **Kill / redesign result**: measurable cross-contamination of the
-  sensing zone or measurable helium presence during Mode A. This would
+  sensing zone or measurable helium presence during Mode B. This would
   force either separate chambers (abandoning the same-chamber premise)
   or a substantially different mode-switching architecture.
 

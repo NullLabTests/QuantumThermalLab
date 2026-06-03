@@ -12,7 +12,7 @@
 | Same-chamber mode-switched growth and sensing | PROPOSED, not demonstrated |
 | Current full-cycle MC | 0.0% |
 | PASS count | 0 |
-| BLOCKED count | 20 |
+| BLOCKED count | 21 |
 | CONDITIONAL count | 39 |
 | UNKNOWN count | 2 |
 | DERIVED_CHECK count | 1 |
@@ -347,7 +347,7 @@ All 63 gates: can_PASS_now = NO.
 ## THERMAL FEEDBACK FRAMEWORK
 
 The canonical framework is mode-local secondary thermal feedback (Mode D only).
-There is no live framework for between-mode coupling because Mode A and Mode D
+There is no live framework for between-mode coupling because Mode B and Mode D
 are mutually exclusive.
 
 ---
@@ -405,9 +405,9 @@ Live operating-point file is `best_forecast_operating_point.json` with
 | validation_matrix.csv | COMPLETE_DRAFT | 157 rows (was 147; added RTB/JT optional cooling-plant rows) |
 | interface_map.csv | COMPLETE_DRAFT | 75 rows (was 68; added I069-I075 for RTB/JT optional cooling plant) |
 | interlock_table.csv | COMPLETE_DRAFT | 14 interlocks (added IL-14) |
-| assumed_parameters.json | COMPLETE_DRAFT | 111 entries (was 81; added Mode A optics + Mode D readout split) |
+| assumed_parameters.json | COMPLETE_DRAFT | 111 entries (was 81; added Mode B optics + Mode D readout split) |
 | source_map.csv | COMPLETE_DRAFT | 60 rows; new schema |
-| best_forecast_operating_point.json | COMPLETE | forecast_only=true; tau_c_canonical=292; Mode A status documented |
+| best_forecast_operating_point.json | COMPLETE | forecast_only=true; tau_c_canonical=292; Mode B status documented |
 | superseded_best_operating_point_v3.json | QUARANTINED | SUPERSEDED labels |
 | tau_c_sweep.csv | COMPLETE | 9 rows; canonical 292 µs gate; 27.728 µs row = SUPERSEDED_V30 |
 | representative_source_audit.csv | REPRESENTATIVE_ONLY | 7 rows |

@@ -126,11 +126,11 @@ P0124,eta_abs_A,eta_abs_A,dimensionless,,,,,uniform,YES,NO,REQUIRES_EXPERIMENT,U
 P0125,precursor_species,precursor_species,N/A,,,,,uniform,YES,NO,UNKNOWN,UNKNOWN,,,MEASURED_REQUIRED,Mode B LCVD. CH4 typical; alternatives possible. [status normalized from USER_DECISION_PENDING: pending user/architect d
 P0126,deposition_yield_per_pulse_A,deposition_yield_per_pulse_A,atoms/pulse,,,,,uniform,YES,NO,REQUIRES_EXPERIMENT,UNKNOWN,,,MEASURED_REQUIRED,Mode B LCVD. PRIMARY UNKNOWN.
 P0127,local_surface_temperature_A,local_surface_temperature_A,K,,,,,uniform,YES,NO,REQUIRES_EXPERIMENT,UNKNOWN,,,MEASURED_REQUIRED,Mode B LCVD. Photolysis/pyrolysis condition.
-P0128,G_growth_to_dump,G_growth_to_dump,W/K,,,,,uniform,YES,NO,REQUIRES_EXPERIMENT,UNKNOWN,,,MEASURED_REQUIRED,Mode A thermal dump (non-MC).
-P0129,G_growth_to_MC_leak,G_growth_to_MC_leak,W/K,,,,,uniform,YES,NO,REQUIRES_EXPERIMENT,UNKNOWN,,,MEASURED_REQUIRED,Mode A thermal dump. Must be << P_cool_MC budget.
-P0130,E_pulse_D,E_pulse_D,J,,5e-11,,,lognormal,YES,NO,ASSUMED,ASSUMED,,,ASSUMED_UNCERTAIN,Mode D NV readout pulse energy. Sim uses 50 pJ. Separate from Mode A E_pulse_A.
-P0131,f_rep_D,f_rep_D,Hz,,200.0,,,lognormal,YES,NO,ASSUMED,ASSUMED,,,ASSUMED_UNCERTAIN,Mode D NV readout rep rate. Period = 5 ms. Separate from Mode A f_rep_A.
-P0132,eta_abs_D,eta_abs_D,dimensionless,,0.05,,,,NO,NO,INDIRECT,ASSUMED,,,FIXED_DESIGN,Mode D NV readout absorption coefficient. Separate from Mode A eta_abs_A.
+P0128,G_growth_to_dump,G_growth_to_dump,W/K,,,,,uniform,YES,NO,REQUIRES_EXPERIMENT,UNKNOWN,,,MEASURED_REQUIRED,Mode B thermal dump (non-MC).
+P0129,G_growth_to_MC_leak,G_growth_to_MC_leak,W/K,,,,,uniform,YES,NO,REQUIRES_EXPERIMENT,UNKNOWN,,,MEASURED_REQUIRED,Mode B thermal dump. Must be << P_cool_MC budget.
+P0130,E_pulse_D,E_pulse_D,J,,5e-11,,,lognormal,YES,NO,ASSUMED,ASSUMED,,,ASSUMED_UNCERTAIN,Mode D NV readout pulse energy. Sim uses 50 pJ. Separate from Mode B E_pulse_A.
+P0131,f_rep_D,f_rep_D,Hz,,200.0,,,lognormal,YES,NO,ASSUMED,ASSUMED,,,ASSUMED_UNCERTAIN,Mode D NV readout rep rate. Period = 5 ms. Separate from Mode B f_rep_A.
+P0132,eta_abs_D,eta_abs_D,dimensionless,,0.05,,,,NO,NO,INDIRECT,ASSUMED,,,FIXED_DESIGN,Mode D NV readout absorption coefficient. Separate from Mode B eta_abs_A.
 P0133,T_peak_D,T_peak_D,K,,0.673,,,,NO,YES,DERIVED,DERIVED,,,DERIVED,Mode D NV readout cumulative pulse heating. Sim reports 673 mK from 200 Hz operation.
 P0134,tau_recovery_D,tau_recovery_D,s,,4.2e-08,,,lognormal,YES,NO,ASSUMED,ASSUMED,,,ASSUMED_UNCERTAIN,Mode D NV readout thermal recovery time.
 P0135,thermal_cycling_N100_status,thermal_cycling_N100_status,cycles,,,,,uniform,YES,NO,REQUIRES_EXPERIMENT,UNVERIFIED,,,MEASURED_REQUIRED,Engineering qualification.
