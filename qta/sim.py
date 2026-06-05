@@ -218,29 +218,41 @@ def run_simulation(output_dir=None):
     }
 
 
-def main():
+def main(no_viz=False):
     """CLI entry point for the QTA simulation."""
     result = run_simulation()
     verdict, all_gates, mc, info = result
 
-    print("=" * 60)
-    print("QTA SIMULATION v3.1 — Same-Chamber Staged Operation")
-    print("Four mutually exclusive modes. LCVD and sensing NEVER concurrent.")
-    print("=" * 60)
-
-    print("\n  Mode A (Baseline/Stabilization)")
-    print("  Mode B (Material Processing / LCVD Growth)")
-    print("  Mode C (Isolation / Purge / Thermal Recovery)")
-    print("  Mode D (Sensing / Measurement — NV / He-3)")
-
-    print(f"\nGATE COUNTS: {info['tp']}P | {info['tc']}C | {info['tf']}F | {info['tu']}U | {info['tb']}B")
-    print(f"MC PASS RATE (forecast): {info['pass_rate']*100:.1f}%")
-    print(f"DOMINANT FAILURE: {info['dominant_failure']}")
-    print(f"\nVERDICT: {verdict}")
-    print(f"  {info['note']}")
-    print(f"\n  T_sample (forecast): {info['sv'].T_sample_K*1e3:.4f} mK")
-    print(f"  tau_c threshold: 292 µs (SNR ≥ 5 + ε_thermo < 1%)")
-    print(f"\nOutputs written to: outputs/")
+    if no_viz:
+        print("=" * 60)
+        print("QTA SIMULATION v3.1 — Same-Chamber Staged Operation")
+        print("Four mutually exclusive modes. LCVD and sensing NEVER concurrent.")
+        print("=" * 60)
+        print("\n  Mode A (Baseline/Stabilization)")
+        print("  Mode B (Material Processing / LCVD Growth)")
+        print("  Mode C (Isolation / Purge / Thermal Recovery)")
+        print("  Mode D (Sensing / Measurement — NV / He-3)")
+        print(f"\nGATE COUNTS: {info['tp']}P | {info['tc']}C | {info['tf']}F | {info['tu']}U | {info['tb']}B")
+        print(f"MC PASS RATE (forecast): {info['pass_rate']*100:.1f}%")
+        print(f"DOMINANT FAILURE: {info['dominant_failure']}")
+        print(f"\nVERDICT: {verdict}")
+        print(f"  {info['note']}")
+        print(f"\n  T_sample (forecast): {info['sv'].T_sample_K*1e3:.4f} mK")
+        print(f"  tau_c threshold: 292 µs (SNR ≥ 5 + ε_thermo < 1%)")
+        print(f"\nOutputs written to: outputs/")
+    else:
+        from .viz import (
+            print_dashboard, print_thermal_state,
+            print_bottleneck_analysis, print_header, print_gate_row,
+        )
+        print_dashboard(all_gates, mc, verdict)
+        print_thermal_state(info['sv'])
+        print_header("Gate Summary (first 10)")
+        for g in all_gates[:10]:
+            print_gate_row(g)
+        print(f"\n  {len(all_gates)} total gates. See outputs/ for full table.")
+        print_bottleneck_analysis(all_gates)
+        print(f"\nOutputs written to: outputs/\n")
     return verdict
 
 

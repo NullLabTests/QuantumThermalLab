@@ -166,7 +166,7 @@ class ModeStateVector:
             Pvib = 1e-4 * self.S_vib_m2Hz * 10. * 100. / (2. * 100.)
             Prad = sigma_SB * 0.10 * 1e-6 * Ts**4
             Pt = P_He + Popt + self.P_mw_W + self.P_cond_W + Pvib + self.P_lk_W + Prad
-            Tn = self.T_fridge_K + Pt / self.G_eff_WK
+            Tn = self.T_fridge_K + Pt / max(self.G_eff_WK, 1e-30)
             if abs(Tn - Ts) < 1e-13:
                 Ts = Tn
                 break
@@ -189,8 +189,8 @@ class ModeStateVector:
         self.F_fluence = E_abs / (pi * (361e-9)**2)
 
         dZFS = 74e3 * 2 * pi
-        self.dOm_opt_static = dZFS * (self.P_opt_W / self.G_eff_WK)
-        self.dOm_mw_static = dZFS * (self.P_mw_W / self.G_eff_WK)
+        self.dOm_opt_static = dZFS * (self.P_opt_W / max(self.G_eff_WK, 1e-30))
+        self.dOm_mw_static = dZFS * (self.P_mw_W / max(self.G_eff_WK, 1e-30))
 
         Cd = A_deb * Ts**3
         dT = math.sqrt(k_B * Ts**2 / Cd)
@@ -201,12 +201,12 @@ class ModeStateVector:
         gHe = 2 * pi * 32.434e6
         Cc = (mu_0 / (4 * pi))**2 * gNV**2 * gHe**2 * hbar**2
 
-        Icpw = math.sqrt(2 * self.P_mw_W / 50.)
+        Icpw = math.sqrt(2 * max(self.P_mw_W, 1e-30) / 50.)
         w = self.w_CPW_m
         d = self.d_NV_m
         self.B1_T = (mu_0 * Icpw / (pi * w)) * (math.atan(w / (2 * d)) - math.atan(-w / (2 * d)))
         self.Omega_R_rads = gNV * self.B1_T / 2.
-        self.tau_pi2_s = (pi / 2.) / self.Omega_R_rads
+        self.tau_pi2_s = (pi / 2.) / max(self.Omega_R_rads, 1e-30)
         self.pd = math.exp(-self.tau_pi2_s / self.T2s_s)
         self.C_eff = self.C_contr * self.pd**2
 
@@ -221,9 +221,10 @@ class ModeStateVector:
         tseq = 3e-6 + 2 * self.tau_pi2_s + self.T2e_s + 300e-9
         Nseq = max(1, int(5e-3 / tseq))
         Nph = 200 * 1e4 * Nseq * 0.70 * ecol
-        self.delta_G_rads = 1. / (self.C_eff * self.T2e_s * math.sqrt(Nph + Ndk))
+        denom = max(self.C_eff * self.T2e_s, 1e-300) * math.sqrt(Nph + Ndk)
+        self.delta_G_rads = 1. / denom
         self.SNR = GDC / self.delta_G_rads
-        self.eps_thermo = self.dOm_thermo / self.delta_G_rads if self.delta_G_rads > 0 else float('inf')
+        self.eps_thermo = self.dOm_thermo / max(self.delta_G_rads, 1e-300)
         self.P_CH4_valve_leak_Pa = 1e-11 / 0.010
         return self
 
@@ -366,20 +367,40 @@ def make_D(mode_b_result):
     return s
 
 
-def make_mode_D_state(chamber_cfg=None, tau_c_s=4e-3, tau_c_tag="UNKNOWN"):
+def make_mode_D_state(chamber_cfg=None, tau_c_s=4e-3, tau_c_tag="UNKNOWN", **overrides):
+    """Create a Mode D state vector with optional field overrides.
+
+    Pass any ModeStateVector field as a keyword override, e.g.:
+        make_mode_D_state(G_eff_WK=3e-5, eta_abs=0.10)
+    """
     if chamber_cfg is None:
         chamber_cfg = CHAMBER_STATE["post_bakeout"]
-    sv = ModeStateVector(
-        mode_name="MODE_D_SENSE",
+    defaults = dict(
         G_eff_WK=1e-5, G_eff_tag="ASSUMED",
         eta_abs=0.05, E_pulse_J=50e-12, f_rep_Hz=200.,
         P_mw_W=1e-9, P_cond_W=2.46e-9, P_lk_W=4.4e-12,
         T_fridge_K=0.010, S_vib_m2Hz=1e-10,
-        n_s_m2=3.3e18, tau_c_s=tau_c_s, tau_c_tag=tau_c_tag,
-        C_contr=0.10, T2s_s=10e-6, d_NV_m=10e-9, w_CPW_m=5e-6,
+        n_s_m2=3.3e18, C_contr=0.10, T2s_s=10e-6,
+        d_NV_m=10e-9, w_CPW_m=5e-6,
         P_H2_Pa=chamber_cfg["P_H2_Pa"],
         P_CH4_Pa=chamber_cfg["P_CH4_Pa"],
         P_He_dose_Pa=1e-6,
+    )
+    defaults.update(overrides)
+    sv = ModeStateVector(
+        mode_name="MODE_D_SENSE",
+        G_eff_WK=defaults.pop("G_eff_WK"), G_eff_tag=defaults.pop("G_eff_tag"),
+        eta_abs=defaults.pop("eta_abs"), E_pulse_J=defaults.pop("E_pulse_J"),
+        f_rep_Hz=defaults.pop("f_rep_Hz"),
+        P_mw_W=defaults.pop("P_mw_W"), P_cond_W=defaults.pop("P_cond_W"),
+        P_lk_W=defaults.pop("P_lk_W"),
+        T_fridge_K=defaults.pop("T_fridge_K"),
+        S_vib_m2Hz=defaults.pop("S_vib_m2Hz"),
+        n_s_m2=defaults.pop("n_s_m2"), tau_c_s=tau_c_s, tau_c_tag=tau_c_tag,
+        C_contr=defaults.pop("C_contr"), T2s_s=defaults.pop("T2s_s"),
+        d_NV_m=defaults.pop("d_NV_m"), w_CPW_m=defaults.pop("w_CPW_m"),
+        P_H2_Pa=defaults.pop("P_H2_Pa"), P_CH4_Pa=defaults.pop("P_CH4_Pa"),
+        P_He_dose_Pa=defaults.pop("P_He_dose_Pa"),
     )
     sv.solve()
     return sv

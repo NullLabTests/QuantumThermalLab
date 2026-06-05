@@ -2,15 +2,16 @@
 
 import math
 from dataclasses import dataclass
+from typing import Optional, Union
 
-k_B = 1.380649e-23
-hbar = 1.054571817e-34
-mu_0 = 1.25663706212e-6
-sigma_SB = 5.670374419e-8
-m_p = 1.67262192369e-27
-pi = math.pi
+k_B: float = 1.380649e-23
+hbar: float = 1.054571817e-34
+mu_0: float = 1.25663706212e-6
+sigma_SB: float = 5.670374419e-8
+m_p: float = 1.67262192369e-27
+pi: float = math.pi
 
-def safe_exp(x):
+def safe_exp(x: float) -> float:
     return float('inf') if x > 700 else math.exp(x)
 
 # Source-class taxonomy
@@ -89,7 +90,8 @@ ENG = {
 }
 
 
-def gate_status_3layer(specified, installed, verified, physics_ok=True, blocking_if_not_specified=False):
+def gate_status_3layer(specified: bool, installed: bool, verified: bool,
+                       physics_ok: bool = True, blocking_if_not_specified: bool = False) -> str:
     if not specified:
         return BLOCKING if blocking_if_not_specified else "CONDITIONAL"
     if not installed:
@@ -99,19 +101,19 @@ def gate_status_3layer(specified, installed, verified, physics_ok=True, blocking
     return "PASS" if physics_ok else "FAIL"
 
 
-def hw_status(specified, installed, verified):
+def hw_status(specified: bool, installed: bool, verified: bool) -> str:
     if verified:   return VALIDATED
     if installed:  return INSTALLED_UNTESTED
     if specified:  return DESIGN_SPECIFIED
     return NOT_INSTALLED
 
 
-def eng_gate_status(key, physics_ok=True):
+def eng_gate_status(key: str, physics_ok: bool = True) -> str:
     e = ENG[key]
     return gate_status_3layer(e.specified, e.installed, e.verified, physics_ok)
 
 
-def eng_note(key, physics_value=""):
+def eng_note(key: str, physics_value: str = "") -> str:
     e = ENG[key]
     layer = hw_status(e.specified, e.installed, e.verified)
     s = f"[{layer}] {e.name}"
