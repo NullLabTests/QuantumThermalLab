@@ -1,0 +1,14 @@
+[project]
+name = "quantum-thermal-architecture"
+version = "3.1.0"
+description = "Pre-experimental feasibility framework for same-chamber NV/He-3 quantum sensing and material processing at millikelvin temperatures."
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+keywords = ["quantum", "sensing", "cryogenic", "NV-diamond", "helium-3", "LCVD", "simulation"]
+
+[project.urls]
+Homepage = "https://github.com/NullLabTests/QuantumThermalLab"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
