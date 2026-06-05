@@ -10,8 +10,8 @@ from .constants import (
     PARAM_REGISTRY,
 )
 from .model import (
-    Gate, SystemState,
-    CURRENT_MODE_B, CURRENT_CHAMBER,
+    SystemState,
+    CURRENT_MODE_B,
     make_mode_D_state, make_A, make_B, make_C, make_D,
     CHAMBER_STATE,
 )
@@ -181,7 +181,7 @@ def run_simulation(output_dir=None):
                           "source": r[4], "modes": r[5], "uncertainty": r[6]})
 
     # --- Compute verdict ---
-    _block_statuses = {"BLOCKED", BLOCKING}
+    _block_statuses = {BLOCKING}
     has_fail = any(g.status == "FAIL" for g in all_gates)
     has_unkn = any(g.status == "UNKNOWN" for g in all_gates)
     n_cond = sum(1 for g in all_gates if g.status == "CONDITIONAL")

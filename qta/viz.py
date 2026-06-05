@@ -4,8 +4,7 @@ import json
 import shutil
 import textwrap
 from pathlib import Path
-from .constants import BLOCKING, VALIDATED
-from .model import Gate
+from .constants import BLOCKING
 
 # ANSI color codes
 class C:
@@ -136,7 +135,7 @@ def print_bottleneck_analysis(all_gates):
     print(f"\n{C.BOLD}{C.RED}Bottleneck Analysis{C.RESET}")
     print(f"{C.DIM}{'─' * (W-4)}{C.RESET}")
 
-    blocked = [g for g in all_gates if g.status in ("BLOCKED", BLOCKING)]
+    blocked = [g for g in all_gates if g.status == BLOCKING]
     unknown = [g for g in all_gates if g.status == "UNKNOWN"]
     conditional = [g for g in all_gates if g.status == "CONDITIONAL"]
 

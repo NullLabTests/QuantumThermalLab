@@ -1,3 +1,4 @@
+
 ```
                          ███████╗ ████████╗ █████╗
                          ██╔════╝ ╚══██╔══╝██╔══██╗
@@ -8,16 +9,42 @@
    ██████╗ ██╗   ██╗ █████╗ ███╗   ██╗████████╗██╗   ██╗███╗   ███╗
   ██╔═══██╗██║   ██║██╔══██╗████╗  ██║╚══██╔══╝██║   ██║████╗ ████║
   ██║   ██║██║   ██║███████║██╔██╗ ██║   ██║   ██║   ██║██╔████╔██║
-  ██�▄▄ ██║██║   ██║██╔══██║██║╚██╗██║   ██║   ██║   ██║██║╚██╔╝██║
+  ██▄▄▄██║██║   ██║██╔══██║██║╚██╗██║   ██║   ██║   ██║██║╚██╔╝██║
   ╚██████╔╝╚██████╔╝██║  ██║██║ ╚████║   ██║   ╚██████╔╝██║ ╚═╝ ██║
    ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═══╝   ╚═╝    ╚═════╝ ╚═╝     ╚═╝
 ```
 # ⚛ Quantum Thermal Architecture (QTA) Simulation Toolkit
 
-> **Pre-experimental feasibility framework** for same-chamber NV⁻/He-₃ quantum sensing
-> and diamond material processing at **millikelvin temperatures**.
->
-> 🟡 **CONDITIONAL** — Specified ≠ Installed ≠ Verified. No working hardware.
+## 🎯 What Is This?
+
+A **pre-experimental feasibility framework** for a proposed quantum sensing platform
+that would combine **NV⁻ diamond** and **He-₃ gas** in a single cryogenic chamber
+at **millikelvin temperatures**, with **in situ material processing** (LCVD diamond
+growth) interleaved between sensing runs.
+
+**The question this toolkit answers:**
+
+> *"Before we spend $500K+ building the hardware — is this design even physically
+> feasible? What are the showstoppers? What must we measure first?"*
+
+The answer today: [**🟡 CONDITIONAL**](#-live-status-dashboard) — the physics checks
+out on paper, but **zero** hardware components are installed and **zero** parameters
+have been measured in the actual system. Two critical unknowns (τ_c and C_contr at
+10 mK) require experimental measurement before feasibility can be confirmed.
+
+---
+
+## 👥 Who Is This For?
+
+| Role | What they get |
+|------|---------------|
+| **Experimental physicists** | A prioritized list of 10 first experiments; tau_c sweep showing SNR vs coherence; thermal budget breakdown |
+| **Cryogenic engineers** | 35 ordered engineering fixes; 14 hardware interlocks; 24-component three-layer status; G_eff/sinter analysis |
+| **Grant reviewers** | Clear pre-experimental status dashboard; explicit list of ALL assumptions (none hidden); risk register |
+| **Lab PIs** | Go/no-go decision framework; bottleneck analysis; Monte Carlo failure mode ranking |
+
+**🔬 Built with zero third-party dependencies** — pure Python 3.10+ stdlib.
+Runs on any machine in seconds.
 
 ---
 
@@ -56,53 +83,38 @@
 ## ⚡ QUICK START
 
 ```bash
-# ▶️ Run full simulation with rich terminal dashboard
+# ▶️ Full simulation with color dashboard
 python run.py
 
-# 🔍 Run with consistency check
-python run.py --check
+# 🔎 Bottleneck analysis (blocked/unknown gates)
+python run.py bottleneck
 
-# 🔎 Show bottleneck analysis
-python run.py --bottleneck
+# 📊 Parameter sweep (tau_c, G_eff, eta_abs...)
+python run.py sweep --param tau_c
 
-# 📊 Plain output (no ANSI color)
-python run.py --no-viz
+# 🔬 Sensitivity ranking (dSNR/dP, dT/dP for each parameter)
+python run.py sens
 
-# ✅ Run test suite (24 tests, 0 dependencies)
+# 📄 Standalone HTML report
+python run.py report
+# → outputs/qta_report.html
+
+# 📋 JSON output (pipe to jq)
+python run.py json
+python run.py json | jq '.verdict, .gate_counts'
+
+# ⚡ Parallel Monte Carlo (2-4× faster)
+python run.py pc -N 10000
+
+# ✅ Run all tests
 python -m pytest tests/ -v
-
-# 🐍 Use as package
-python -c "from qta.sim import main; main()"
 ```
 
-**📦 Requirements:** Python 3.10+ | **Zero** third-party dependencies
+**📦 Zero dependencies.** Python 3.10+ only.
 
 ---
 
-## 🔮 THERMAL STATE VECTOR
-
-Forecast for Mode D (post-bakeout, τ_c = 4 ms assumed):
-
-```
-  🌡️  T_sample        ─── 10.413 mK        🟢  (+0.413 mK above base)
-  📡  P_total         ─── 4.13 nW           🟢  << 200 µW P_cool_MC
-  🔦  P_opt           ─── 500.0 pW          🟡  (η_abs = 0.05 ASSUMED)
-  📻  P_mw            ─── 1.0 nW            🟡  (ASSUMED)
-  🔗  P_cond          ─── 2.5 nW            ⚪  (wiring ASSUMED)
-  📳  P_vib           ─── 0.5 pW            ⚪  (ASSUMED)
-  ☀️  P_rad           ─── 0.0005 pW         ⚪  (negligible)
-  🧊  P_He            ─── 126.0 pW          ⚪  (He-3 film)
-  🔧  G_eff           ─── 1.0e-5 W/K        🟡  (ASSUMED — not measured)
-  🧲  Ω_R             ─── 139591 rad/s      🟡  (τ_π/2 = 11.25 µs)
-  ⏱️  T₂e             ─── 9.36 µs           🟡  (pulse dephasing)
-  🎯  SNR             ─── 18.5              🟢  (if τ_c = 4 ms)
-  📊  Kn_He           ─── 46                🟢  molecular flow
-  🔬  ε_thermo        ─── 0.0001%           🟢  (thermal feedback negligible)
-```
-
----
-
-## 🏛️ ARCHITECTURE: FOUR-MODE OPERATION
+## 🏛️ The Architecture: Four Mutually Exclusive Modes
 
 ```
                           ┌─────────────────────────────────────┐
@@ -113,8 +125,7 @@ Forecast for Mode D (post-bakeout, τ_c = 4 ms assumed):
                           │    🚫 He-3 + PRECURSOR = IMPOSSIBLE │
                           │    🚫 LCVD + SWITCH_CLOSED = HEAT   │
                           └─────────────────────────────────────┘
-                                    │
-                                    ▼
+
   ╔═══════════════════════════════════════════════════════════════════════╗
   ║                                                                       ║
   ║    ❄️ MODE A                     🔥 MODE B                           ║
@@ -157,184 +168,188 @@ Forecast for Mode D (post-bakeout, τ_c = 4 ms assumed):
 
 ---
 
-## 🔗 DATA FLOW & PACKAGE ARCHITECTURE
+## 🔴 THE PRIMARY BOTTLENECK: τ_c (He-3 Spin Coherence)
+
+The simulation identifies **one dominant unknown** that determines feasibility:
 
 ```
-                         ┌──────────────────────┐
-                         │    🧬 PARAM REGISTRY │
-                         │    49 parameters     │
-                         │    ■ MANUFACTURER_SPEC│
-                         │    ■ PHYSICAL_CONSTANT│
-                         │    ■ LITERATURE       │
-                         │    ■ ASSUMED          │
-                         │    ■ UNKNOWN          │
-                         │    ■ DESIGN           │
-                         └──────────┬───────────┘
-                                    │ feeds
-          ┌─────────────────────────┼─────────────────────────┐
-          │                         │                         │
-          ▼                         ▼                         ▼
-┌──────────────────┐     ┌──────────────────┐     ┌──────────────────┐
-│   📐 ModeState    │     │    🚦 SystemState │     │   🏭 ChamberState │
-│   Vector.solve() │     │    validate()     │     │   P_H2(), P_CH4() │
-│                  │     │                  │     │                  │
-│  Self-consistent │     │  Enforces 14     │     │  Hardware state  │
-│  thermal balance │     │  hardware        │     │  with bakeout/   │
-│  + detection SNR │     │  interlocks      │     │  NEG/cryotrap    │
-└────────┬─────────┘     └────────┬─────────┘     └────────┬─────────┘
-         │                       │                         │
-         └───────────┬───────────┴───────────┬─────────────┘
-                     │                       │
-                     ▼                       ▼
-          ┌──────────────────┐     ┌──────────────────┐
-          │    🚪 GATES      │     │  🎲 MONTE CARLO  │
-          │    63 decision   │     │  10,000 samples  │
-          │    gates across  │     │  log-U[1ns,100ms]│
-          │    4 modes + eng │     │  for τ_c         │
-          └────────┬─────────┘     └────────┬─────────┘
-                   │                       │
-                   └───────────┬───────────┘
-                               ▼
-                    ┌──────────────────────┐
-                    │  📋 OUTPUT FILES     │
-                    │  ■ results_gate_table.csv  │
-                    │  ■ monte_carlo_summary.csv │
-                    │  ■ best_forecast_op.json   │
-                    │  ■ tau_c_sweep.csv    │
-                    │  ■ interlock_table.csv│
-                    │  ■ parameter_registry.csv │
-                    │  ■ failed_gate_samples.csv │
-                    └──────────────────────┘
+  τ_c ≥ 292 µs   →   SNR ≥ 5   →   Mode D feasible
+  τ_c < 292 µs   →   SNR < 5   →   Mode D infeasible
+
+  66.2% of Monte Carlo samples fail due to τ_c being too short.
+```
+
+### τ_c Sweep Results
+
+```
+   τ_c        SNR     Δγ (rad/s)   T₂e (µs)   Gate
+   ───────────────────────────────────────────────────────────────────
+   1 ns      0.0     6.90e+03     10.0        ❌ FORECAST_THRESHOLD_NOT_MET
+   10 ns     0.1     6.90e+04     10.0        ❌ FORECAST_THRESHOLD_NOT_MET
+   100 ns    0.3     3.37e+05     9.97        ❌ FORECAST_THRESHOLD_NOT_MET
+   1 µs      0.7     6.90e+05     9.69        ❌ FORECAST_THRESHOLD_NOT_MET
+   27.7 µs   2.9     1.63e+06     6.14        ⚠️  SUPERSEDED_V30 (old threshold)
+   292 µs    5.0     2.41e+06     3.02        ✅ CANONICAL_THRESHOLD
+   1 ms      8.7     2.90e+06     1.89        ✅ THRESHOLD_SATISFIED_IF_MEASURED
+   4 ms     18.5     3.19e+06     1.03        ✅ THRESHOLD_SATISFIED_IF_MEASURED
+   10 ms    29.3     3.24e+06     0.62        ✅ THRESHOLD_SATISFIED_IF_MEASURED
+   100 ms   90.5     3.26e+06     0.08        ✅ THRESHOLD_SATISFIED_IF_MEASURED
+
+   Key insight: The v3.0 threshold (27.7 µs) was wrong — it omitted
+   pulse dephasing (pd² in C_eff) and the ε_thermo budget.
 ```
 
 ---
 
-## 🎯 GATE STATUS BREAKDOWN
+## 🧪 Monte Carlo Analysis (N = 10,000)
 
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                          GATE STATUS COLOR CODE                            │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                             │
-│   🟢  PASS         Hardware VERIFIED + physics OK                          │
-│                    →  0 gates (⌀: system pre-experimental)                  │
-│                                                                             │
-│   🟡  CONDITIONAL  Feasible under assumptions — requires validation        │
-│                    → 39 gates (61.9%) — dominant category                   │
-│                      Includes: A1–A7, B1–B2, C1–C4, D3–D8, shield, E01–E14 │
-│                                                                             │
-│   ⬛  BLOCKED      Prerequisite absent — cannot proceed                    │
-│                    → 21 gates (33.3%)                                       │
-│                      Includes: A8–A9, A11, A14, D10a, shield, interlock    │
-│                                                                             │
-│   ❓  UNKNOWN      Requires experimental measurement                       │
-│                    →  2 gates (3.2%)                                        │
-│                      D12: C_contr at 10 mK    D13: τ_c (primary bottleneck) │
-│                                                                             │
-│   🔷 DERIVED_CHECK First-principles check (computational)                  │
-│                    →  1 gate (1.6%)                                         │
-│                      D9: Knudsen number (molecular flow confirmed ✅)       │
-│                                                                             │
-│   🔴  FAIL         Physics constraint violated                              │
-│                    →  0 gates                                               │
-│                                                                             │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
-
----
-
-## 🔴 BOTTLENECK ANALYSIS
-
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                          BOTTLENECK SEVERITY                               │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                             │
-│   BLOCKED     ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░░░░░░░░░░░░░░░░  33.3%        │
-│              (21 gates blocked by hardware not installed)                   │
-│                                                                             │
-│   UNKNOWN     ▓▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   3.2%        │
-│              (τ_c and C_contr — require cryogenic experiment)              │
-│                                                                             │
-│   CONDITIONAL ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░  61.9%       │
-│              (39 gates — plausible but unvalidated)                        │
-│                                                                             │
-└─────────────────────────────────────────────────────────────────────────────┘
-
- ⛔ Top Blocked Gates:
-   A8   — Local surface T during deposition pulse measured    [THERMOMETRY]
-   A9   — Deposition yield per pulse measured                 [QCM + AFM]
-   A11  — Byproducts pump below RGA threshold before Mode D   [RGA]
-   A14  — He-3/He-4 film absent before Mode B Processing     [QCM + RGA]
-   D10a — H2 Engineering Readiness (bakeout+NEG+cryotrap+RGA) [4× INFRA]
-
- ❓ Unknown Gates (require experiment):
-   D12_G23 — NV Charge State (UNKNOWN; not derivable)
-             → ODMR at 10mK post-cycle (F15)
-   D13     — Detection SNR (τ_c UNKNOWN)
-             → Ramsey + He-4 control (F16)
-```
-
----
-
-## 🎲 MONTE CARLO ANALYSIS (N = 10,000)
-
-### Sampling Distributions & Failure Impact
+### Sampling Distributions
 
 ```
    τ_c      ████████████████████░░░░░░░░░░░░  log-U[1ns, 100ms]   🔴 66.2%  DOMINANT
    G_eff    ████████████░░░░░░░░░░░░░░░░░░░░  U[5e-6, 3e-5] W/K  🟡 18.3%
    ε_thermo ██████░░░░░░░░░░░░░░░░░░░░░░░░░░  coupled             🟡 11.0%
-   C_contr  ████████████████░░░░░░░░░░░░░░░░  U[0.05, 0.20]       🟡 secondary
-   T₂*      ██████████░░░░░░░░░░░░░░░░░░░░░░  U[5, 20] µs        ⚪ coupled
-   P_H₂     ████░░░░░░░░░░░░░░░░░░░░░░░░░░░░  U[5e-13, 2e-12] Pa ⚪  0.1%
-   η_abs    ████░░░░░░░░░░░░░░░░░░░░░░░░░░░░  U[0.02, 0.10]      ⚪  0.0%
-   S_vib    ████░░░░░░░░░░░░░░░░░░░░░░░░░░░░  U[1e-11, 1e-8]     ⚪ coupled
-```
-
-### τ_c Sweep (Threshold at 292 µs for SNR ≥ 5)
-
-```
-   τ_c        SNR     Δγ (rad/s)   T₂e (µs)   dγ (rad/s)   Gate
-   ───────────────────────────────────────────────────────────────────
-   1 ns      0.0     6.90e+03     10.0        8.29e+05     ❌ FORECAST_THRESHOLD_NOT_MET
-   10 ns     0.1     6.90e+04     10.0        8.29e+05     ❌ FORECAST_THRESHOLD_NOT_MET
-   100 ns    0.3     3.37e+05     9.97        8.29e+05     ❌ FORECAST_THRESHOLD_NOT_MET
-   1 µs      0.7     6.90e+05     9.69        9.21e+05     ❌ FORECAST_THRESHOLD_NOT_MET
-   27.7 µs   2.9     1.63e+06     6.14        5.58e+05     ⚠️  SUPERSEDED_V30
-   292 µs    5.0     2.41e+06     3.02        4.83e+05     ✅ CANONICAL_THRESHOLD
-   1 ms      8.7     2.90e+06     1.89        3.33e+05     ✅ THRESHOLD_SATISFIED_IF_MEASURED
-   4 ms     18.5     3.19e+06     1.03        1.72e+05     ✅ THRESHOLD_SATISFIED_IF_MEASURED
-   10 ms    29.3     3.24e+06     0.62        1.11e+05     ✅ THRESHOLD_SATISFIED_IF_MEASURED
-   100 ms   90.5     3.26e+06     0.08        3.60e+04     ✅ THRESHOLD_SATISFIED_IF_MEASURED
-
-   Key insight: τ_c ≥ 292 µs is REQUIRED for SNR ≥ 5.
-   v3.0 threshold of 27.7 µs is SUPERSEDED — it did not account for
-   pulse dephasing (pd² term in C_eff) or ε_thermo budget.
+   C_contr  ████████████████░░░░░░░░░░░░░░░░  U[0.05, 0.20]       secondary
+   T₂*      ██████████░░░░░░░░░░░░░░░░░░░░░░  U[5, 20] µs        coupled
+   P_H₂     ████░░░░░░░░░░░░░░░░░░░░░░░░░░░░  U[5e-13, 2e-12] Pa  0.1%
+   η_abs    ████░░░░░░░░░░░░░░░░░░░░░░░░░░░░  U[0.02, 0.10]       0.0%
+   S_vib    ████░░░░░░░░░░░░░░░░░░░░░░░░░░░░  U[1e-11, 1e-8]     coupled
 ```
 
 ---
 
-## 🏗️ THREE-LAYER ENGINEERING STATUS
+## 🔧 The 10 Experiments That Determine Feasibility
+
+```
+┌─────┬────────────────────────────────────────┬──────────┬────────────────┐
+│  #  │  Experiment                            │ Resolves │  Measurement   │
+├─────┼────────────────────────────────────────┼──────────┼────────────────┤
+│  1  │  ODMR at 10 mK bare diamond            │ C_contr  │  C_contr > 5%  │
+│     │  ⚠️  MUST BE FIRST                    │          │                │
+│  2  │  Ramsey: He-3 vs He-4 control          │ τ_c      │  τ_c ≥ 292 µs  │
+│     │  🔴 CRITICAL — feasibility gate        │          │                │
+│  3  │  250 °C/48 h bakeout + NEG + RGA      │ P_H₂     │  < 2e-12 Pa    │
+│  4  │  G_eff step-response thermometry       │ G_eff    │  (1.0±0.3) µW/K│
+│  5  │  Fabricate 45 cm² Ag sinter            │ A_sinter │  ≥ 1e-5 W/K    │
+│  6  │  RGA CH₄ after each purge              │ P_CH₄    │  < 5e-12 Pa    │
+│  7  │  Vibration PSD + dB/dz measurement     │ S_vib    │  < 1e-10 m²/Hz │
+│  8  │  Rabi oscillation in cryostat          │ Ω_R      │  ±10% of calc  │
+│  9  │  s(He)/E_b on F-diamond (TPD/QCM)      │ s_He     │  closes model  │
+│ 10  │  η_abs measurement                     │ η_abs    │  closes D6/D7  │
+└─────┴────────────────────────────────────────┴──────────┴────────────────┘
+```
+
+---
+
+## 🧪 Full CLI Reference
+
+```
+  python run.py                              # color dashboard
+  python run.py bottleneck                   # bottleneck analysis
+  python run.py report                       # → outputs/qta_report.html
+  python run.py sweep --param tau_c          # τ_c sweep CSV
+  python run.py sweep --param G_eff          # G_eff sweep
+  python run.py sweep --param eta_abs        # absorption sweep
+  python run.py sens                         # sensitivity ranking
+  python run.py json                         # JSON to stdout
+  python run.py pc -N 10000                  # parallel Monte Carlo
+  python run.py check                        # + consistency check
+  python run.py --no-viz                     # plain text output
+```
+
+---
+
+## 📦 Package Structure
+
+```
+📁 quantum-thermal-architecture/
+│
+├── 📂 qta/                         # 🧬 Main simulation package
+│   ├── __init__.py                 # v3.1.0
+│   ├── constants.py                # ⚛️ Physical constants · EngStatus · PARAM_REGISTRY
+│   ├── model.py                    # 📐 Gate · ModeStateVector · SystemState · ChamberState
+│   ├── gates.py                    # 🚪 All 63 gate definitions (modes A/B/C/D)
+│   ├── monte_carlo.py              # 🎲 Sequential MC (N=10k, log-U sampling)
+│   ├── mc_parallel.py              # ⚡ Parallel MC (multiprocessing, 2-4× faster)
+│   ├── sweep.py                    # 📊 Parameter sweeps · sensitivity ranking
+│   ├── engineering.py              # 🔧 35 fixes · 14 interlocks · 10 experiments
+│   ├── sim.py                      # 🎯 Orchestrator · CSV/JSON output
+│   └── viz.py                      # 🎨 Terminal dashboard · HTML reporter · JSON writer
+│
+├── 📂 tests/                       # ✅ pytest suite (60 tests)
+│   ├── test_constants.py           #   6 tests — constants, status logic
+│   ├── test_model.py               #  10 tests — dataclass validation
+│   ├── test_model_edge.py          #  13 tests — edge cases, zero limits, interlocks
+│   ├── test_sim.py                 #   6 tests — integration, output files
+│   ├── test_engineering.py         #   8 tests — gates, interlocks, fixes
+│   ├── test_mc_parallel.py         #   4 tests — parallel MC engine
+│   ├── test_sweep.py               #   6 tests — sweeps, CSV, sensitivity
+│   └── test_viz.py                 #   5 tests — HTML/JSON reports, badges
+│
+├── run.py                          # ▶️  CLI entry point
+├── run_qta_full_sim.py             # 📜 Legacy monolith shim
+├── qta_full_sim.py                 # 📜 Legacy (2615 lines, kept for compat)
+├── package_consistency_check.py    # 🔍 Independent artifact verifier
+│
+├── 📂 data/                        # 📊 CSV/JSON data (BOM, risk, validation, source maps)
+├── 📂 .github/workflows/           # ⚙️ CI (3 Python versions, lint, test, smoke)
+│
+├── pyproject.toml                  # 📦 Python project metadata
+├── Makefile                        # 🔧 make test / make report / make sweep
+├── LICENSE                         # ⚖️ MIT
+└── README.md                       # 📖 This file
+```
+
+---
+
+## 📐 The Physics Model
+
+The core simulation solves a **self-consistent thermal balance** for Mode D:
+
+```
+  T_sample = T_fridge + P_total / G_eff
+
+  P_total = P_He + P_opt + P_mw + P_cond + P_vib + P_lk + P_rad
+```
+
+Then computes the **NV/He-3 detection SNR**:
+
+```
+  SNR = GDC / δG
+
+  GDC  =  C_c · n_s · τ_c / d⁴        (He-3 dipole coupling)
+  δG   =  1 / (C_eff · T₂e · √(N_ph + N_dk))   (detection noise)
+  C_eff =  C_contr · exp(-2τ_π/₂ / T₂*)         (pulse dephasing)
+```
+
+### Key Parameters
+
+| Parameter | Value | Status | Impact |
+|-----------|-------|--------|--------|
+| T_fridge | 10 mK | MANUFACTURER_SPEC | Base temperature |
+| G_eff | 1e-5 W/K | **ASSUMED** (not measured) | 🔴 D3/D4/D5 thermal budget |
+| τ_c | ❓ UNKNOWN | **UNKNOWN** | 🔴 D13 primary bottleneck |
+| C_contr@10mK | ❓ UNKNOWN | **UNKNOWN** | 🔴 D12 co-equal bottleneck |
+| η_abs | 0.05 | ASSUMED | D6/D7 laser heating |
+| T₂* | 10 µs | ASSUMED | D8/D13 pulse dephasing |
+| P_H₂ | 1e-10 Pa | ASSUMED | D10a/D10b H₂ coverage |
+| τ_c threshold | 292 µs | DERIVED | SNR ≥ 5 + ε_thermo < 1% |
+
+---
+
+## 🏗️ Three-Layer Engineering Status
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                                                                             │
-│    📐  SPECIFIED      →  Design exists (geometry, materials, equations,    │
-│                           expected performance)                             │
+│    📐  SPECIFIED      →  Design exists (geometry, materials, equations)     │
+│    🔧  INSTALLED      →  Hardware physically built & in the cryostat        │
+│    ✅  VERIFIED       →  Measurement confirms performance meets spec        │
 │                                                                             │
-│    🔧  INSTALLED      →  Hardware physically built & present               │
-│                           in the cryostat                                   │
-│                                                                             │
-│    ✅  VERIFIED       →  Measurement confirms performance                  │
-│                           meets specification                                │
-│                                                                             │
-│    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━   │
-│                                                                             │
-│    ⚠️  SPECIFIED ≠ INSTALLED ≠ VERIFIED                                   │
+│    ⚠️  SPECIFIED ≠ INSTALLED ≠ VERIFIED                                    │
 │         🏆 PASS requires ALL THREE layers.                                  │
 │                                                                             │
-│    📌  All 24 hardware components at DESIGN_SPECIFIED only:                │
+│    📌  All 24 hardware components at DESIGN_SPECIFIED only:                 │
 │                                                                             │
 │    Bakeout ▓▓░░░░░░   │  NEG ▓▓░░░░░░░   │  Cryotrap ▓▓░░░░░░░             │
 │    RGA     ░░░░░░░░   │  Pump ▓▓░░░░░░░  │  Leak ░░░░░░░░░░░               │
@@ -352,53 +367,9 @@ Forecast for Mode D (post-bakeout, τ_c = 4 ms assumed):
 
 ---
 
-## 🔧 ENGINEERING FIXES (35 TOTAL)
+## 📋 Hard Interlock Matrix
 
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│  ID    Name                                     Priority    Status           │
-├─────────────────────────────────────────────────────────────────────────────┤
-│  F01   UHV All-Metal Build                     ⬛ REQUIRED  NOT_INSTALLED     │
-│  F02   Differentially Pumped Micro-Nozzle      ⬛ REQUIRED  NOT_INSTALLED     │
-│  F03   Three-Shutter Stack                     ⬛ REQUIRED  NOT_INSTALLED     │
-│  F04   Witness Coupons                         ⬛ REQUIRED  NOT_INSTALLED     │
-│  F05   RGA All-Species Thresholds              ⬛ REQUIRED  NOT_INSTALLED     │
-│  F06   Pump Train (NEG + Ion + Cryo)           ⬛ REQUIRED  NOT_INSTALLED     │
-│  F07   Residual Hydrogen Mitigation            ⬛ REQUIRED  NOT_INSTALLED     │
-│  F08   Surface Re-Termination / Recovery       ⬛ REQUIRED  NOT_INSTALLED     │
-│  F09   Geometric Baffle / Labyrinth            ⬛ REQUIRED  NOT_INSTALLED     │
-│  F10   Cryo-QCM at Sensing Surface             🟡 RECOMMEND NOT_INSTALLED    │
-│  F11   Thermal Switch Validation               ⬛ REQUIRED  NOT_INSTALLED     │
-│  F12   Vibration Metrology                     ⬛ REQUIRED  NOT_INSTALLED     │
-│  F13   Optical Scatter Audit                   ⬛ REQUIRED  NOT_INSTALLED     │
-│  F14   Microwave Heat Audit                    ⬛ REQUIRED  NOT_INSTALLED     │
-│  F15   NV Survival Post-Cycle Pretest          ⬛ REQUIRED  NOT_INSTALLED     │
-│  F16   He-4 Control Experiment                 ⬛ REQUIRED  DESIGN            │
-│  F17   Multiple NV Depths                      🟡 RECOMMEND DESIGN            │
-│  F18   SIL / Waveguide Collection Upgrade      🟡 RECOMMEND DESIGN            │
-│  F19   Magnetic Shielding Package              ⬛ REQUIRED  DESIGN            │
-│  F20   Failure Recovery Path                   ⬛ REQUIRED  DESIGN            │
-│  FA    Protected NV Cartridge / Load-Lock      🟡 RECOMMEND NOT_INSTALLED    │
-│  FB    All-Metal Bake-Compatible Valve Tree    ⬛ REQUIRED  NOT_INSTALLED     │
-│  FC    RGA Line-of-Sight Correction            ⬛ REQUIRED  NOT_INSTALLED     │
-│  FD    Cold-Surface Memory / Desorption        ⬛ REQUIRED  NOT_INSTALLED     │
-│  FE    Shutter Contamination Replacement       ⬛ REQUIRED  NOT_INSTALLED     │
-│  FF    Optical Window Contamination            ⬛ REQUIRED  NOT_INSTALLED     │
-│  FG    Gas Purity Chain                        ⬛ REQUIRED  DESIGN            │
-│  FH    Helium Leak Check Requirement           ⬛ REQUIRED  NOT_INSTALLED     │
-│  FI    Electrical Filtering Heat Budget        ⬛ REQUIRED  NOT_INSTALLED     │
-│  FJ    Thermometer Self-Heating Audit          ⬛ REQUIRED  NOT_INSTALLED     │
-│  FK    Magnetic Field Compatibility Map        ⬛ REQUIRED  DESIGN            │
-│  FL    Eddy-Current Heating                    ⬛ REQUIRED  DESIGN            │
-│  FM    Acoustic Isolation for Pumps            ⬛ REQUIRED  DESIGN            │
-│  FN    Emergency Fail-Safe State               ⬛ REQUIRED  DESIGN            │
-│  FO    Acceptance Test Matrix                  ⬛ REQUIRED  DESIGN            │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
-
----
-
-## 📋 HARD INTERLOCK MATRIX
+14 interlocks prevent physically impossible or damaging mode combinations:
 
 ```
 ┌────────┬──────────────────────────────────────────────┬───────────┬─────────┐
@@ -423,154 +394,63 @@ Forecast for Mode D (post-bakeout, τ_c = 4 ms assumed):
 
 ---
 
-## 🧪 KEY PHYSICS PARAMETERS
-
-```
-┌────────────────┬──────────────────┬────────────────┬────────────────────────┐
-│ Parameter      │ Value            │ Status         │ Impact                 │
-├────────────────┼──────────────────┼────────────────┼────────────────────────┤
-│ T_fridge       │ 10 mK            │ 📄 MANUF_SPEC  │ Base temperature       │
-│ P_cool_MC      │ 200 µW           │ 📄 MANUF_SPEC  │ D3 cooling capacity    │
-│ G_eff          │ 1e-5 W/K         │ 📝 ASSUMED     │ 🔴 D3/D4/D5 thermal    │
-│ τ_c            │ ❓ UNKNOWN        │ ❓ UNKNOWN     │ 🔴 D13 primary bottleneck│
-│ C_contr@10mK   │ ❓ UNKNOWN        │ ❓ UNKNOWN     │ 🔴 D12 co-bottleneck   │
-│ η_abs          │ 0.05             │ 📝 ASSUMED     │ 🟡 D6/D7 laser heat    │
-│ T₂*            │ 10 µs            │ 📝 ASSUMED     │ 🟡 D8/D13 dephasing    │
-│ P_H₂           │ 1e-10 Pa         │ 📝 ASSUMED     │ 🟡 D10a/D10b coverage  │
-│ γ_NV           │ 28.025 GHz/T     │ ⚛️ CODATA       │ D13 gyromagnetic ratio │
-│ γ_He₃          │ 32.434 MHz/T     │ ⚛️ CODATA       │ D13 gyromagnetic ratio │
-│ E_pulse        │ 50 pJ            │ 📝 ASSUMED     │ D6 laser energy        │
-│ f_rep          │ 200 Hz           │ 📝 ASSUMED     │ D6 rep rate            │
-│ S_vib          │ 1e-10 m²/Hz      │ 📝 ASSUMED     │ D17 vibration          │
-│ n_s            │ 3.3e18 m⁻²       │ 📝 ASSUMED     │ D11 He-3 coverage      │
-│ η_col          │ 6.35%            │ 📝 ASSUMED     │ D14 collection eff     │
-└────────────────┴──────────────────┴────────────────┴────────────────────────┘
-```
-
----
-
-## 🛠️ FIRST EXPERIMENTS (PRIORITY ORDERED)
-
-```
-┌─────┬────────────────────────────────────────────┬──────────┬────────────────┐
-│  #  │  Experiment                                │ Resolves │  Measurement   │
-├─────┼────────────────────────────────────────────┼──────────┼────────────────┤
-│  1  │  ODMR at 10 mK bare diamond                │ C_contr  │  C_contr > 5%  │
-│     │  ⚠️  MUST BE FIRST — establishes NV signal │          │                │
-│  2  │  Ramsey: He-3 vs He-4 control              │ τ_c      │  τ_c ≥ 292 µs  │
-│     │  🔴 CRITICAL — determines whole feasibility│          │                │
-│  3  │  250 °C/48 h bakeout + SAES NEG + RGA     │ P_H₂     │  < 2e-12 Pa    │
-│  4  │  G_eff step-response thermometry           │ G_eff    │  (1.0±0.3) µW/K│
-│  5  │  Fabricate 45 cm² Ag sinter                │ A_sinter │  ≥ 1e-5 W/K    │
-│  6  │  RGA CH₄ after each purge                  │ P_CH₄    │  < 5e-12 Pa    │
-│  7  │  Vibration PSD + dB/dz measurement         │ S_vib    │  < 1e-10 m²/Hz │
-│  8  │  Rabi oscillation in cryostat              │ Ω_R      │  ±10% of calc  │
-│  9  │  s(He)/E_b on F-diamond (TPD/QCM)          │ s_He     │  closes model  │
-│ 10  │  η_abs measurement                         │ η_abs    │  closes D6/D7  │
-└─────┴────────────────────────────────────────────┴──────────┴────────────────┘
-```
-
----
-
-## 📦 PACKAGE STRUCTURE
-
-```
-📁 quantum-thermal-architecture/
-│
-├── 📂 qta/                         # 🧬 Main simulation package
-│   ├── 📄 __init__.py              # Package info · v3.1.0
-│   ├── 📄 constants.py             # ⚛️ Physical constants · EngStatus · PARAM_REGISTRY
-│   ├── 📄 model.py                 # 📐 Gate · ModeStateVector · SystemState · ChamberState
-│   ├── 📄 gates.py                 # 🚪 All 63 gate definitions (modes A/B/C/D)
-│   ├── 📄 monte_carlo.py           # 🎲 MC engine (N=10,000, log-U sampling)
-│   ├── 📄 engineering.py           # 🔧 35 fixes · 14 interlocks · 10 experiments
-│   ├── 📄 sim.py                   # 🎯 Orchestrator · CLI · CSV/JSON output
-│   └── 📄 viz.py                   # 🎨 Terminal visualization · ANSI dashboard
-│
-├── 📂 tests/                       # ✅ pytest suite (24 tests)
-│   ├── 📄 __init__.py
-│   ├── 📄 test_constants.py        # Constants & status logic (6 tests)
-│   ├── 📄 test_model.py            # Dataclass validation (10 tests)
-│   └── 📄 test_sim.py              # Integration (7 tests)
-│
-├── 📄 run.py                       # ▶️  CLI entry point
-├── 📄 run_qta_full_sim.py          # 📜 Legacy monolith shim
-├── 📄 qta_full_sim.py              # 📜 Legacy monolith (2615 lines, kept for compat)
-├── 📄 package_consistency_check.py # 🔍 Independent artifact verifier
-│
-├── 📂 data/                        # 📊 CSV/JSON data files
-│   ├── 📄 BOM.csv                  #   121-item bill of materials
-│   ├── 📄 risk_register.csv        #   107 identified risks
-│   ├── 📄 validation_matrix.csv    #   157 validation requirements
-│   ├── 📄 source_map.csv           #   60 parameter-to-source mappings
-│   └── 📄 ... (25+ data files)
-│
-├── 📄 pyproject.toml               # 📦 Python project metadata
-├── 📄 LICENSE                      # ⚖️ MIT License
-└── 📄 README.md                    # 📖 This file
-```
-
----
-
-## 🧪 RUNNING TESTS
+## 🧪 Test Suite (60 passing)
 
 ```bash
-# Full test suite
 python -m pytest tests/ -v
 
-# With coverage report
-python -m pytest tests/ --cov=qta
+tests/test_constants.py ......                                           [ 10%]
+tests/test_engineering.py ........                                       [ 23%]
+tests/test_mc_parallel.py ....                                           [ 30%]
+tests/test_model.py ............                                         [ 50%]
+tests/test_model_edge.py .............                                   [ 71%]
+tests/test_sim.py ......                                                 [ 81%]
+tests/test_sweep.py ......                                               [ 91%]
+tests/test_viz.py .....                                                  [100%]
 
-# Individual test files
-python -m pytest tests/test_constants.py -v
-python -m pytest tests/test_model.py -v
-python -m pytest tests/test_sim.py -v
-```
-
-### Current Test Results
-
-```
-tests/test_constants.py ......                                          [ 25%]
-tests/test_model.py ..........                                         [ 66%]
-tests/test_sim.py .......                                              [100%]
-
-======================= 24 passed in 8.32s ========================
+============================== 60 passed in 0.74s ================================
 ```
 
 ---
 
-## 📚 RELATED DOCUMENTS
+## 🛠️ Engineering Fixes (35 Total)
 
-| File | Description |
-|------|-------------|
-| 📄 `CLAIMS_BOUNDARY.md` | Explicit list of claimed / not-claimed items |
-| 📄 `REVIEWER_COVER_NOTE.md` | One-page summary for technical review |
-| 📄 `REVIEWER_QUESTIONS.md` | ❓ Eight specific technical questions |
-| 📄 `FIRST_VALIDATION_EXPERIMENTS.md` | Priority-ordered first experiments |
-| 📄 `mode_transition_acceptance_tests.csv` | Mode transition criteria |
-| 📄 `shielding_stack_register.csv` | Isolation stack details |
-| 📄 `qta_manuscript_v4.pdf` | Full manuscript (LaTeX, ~40 KB) |
-| 📄 `package_consistency_check.py` | Standalone consistency check |
+```bash
+Fix     Name                                    Priority    Status
+─────────────────────────────────────────────────────────────────────
+F01     UHV All-Metal Build                     REQUIRED    NOT_INSTALLED
+F02     Differentially Pumped Micro-Nozzle      REQUIRED    NOT_INSTALLED
+F03     Three-Shutter Stack                     REQUIRED    NOT_INSTALLED
+F04     Witness Coupons                         REQUIRED    NOT_INSTALLED
+F05     RGA All-Species Thresholds              REQUIRED    NOT_INSTALLED
+F06     Pump Train (NEG + Ion + Cryo)           REQUIRED    NOT_INSTALLED
+F07     Residual Hydrogen Mitigation            REQUIRED    NOT_INSTALLED
+F08     Surface Re-Termination / Recovery       REQUIRED    NOT_INSTALLED
+F09     Geometric Baffle / Labyrinth            REQUIRED    NOT_INSTALLED
+F10     Cryo-QCM at Sensing Surface             RECOMMENDED NOT_INSTALLED
+F11     Thermal Switch Validation               REQUIRED    NOT_INSTALLED
+F12     Vibration Metrology                     REQUIRED    NOT_INSTALLED
+F13     Optical Scatter Audit                   REQUIRED    NOT_INSTALLED
+F14     Microwave Heat Audit                    REQUIRED    NOT_INSTALLED
+F15     NV Survival Post-Cycle Pretest          REQUIRED    NOT_INSTALLED
+F16     He-4 Control Experiment                 REQUIRED    DESIGN
+F17     Multiple NV Depths                      RECOMMENDED DESIGN
+F18     SIL / Waveguide Collection Upgrade      RECOMMENDED DESIGN
+F19     Magnetic Shielding Package              REQUIRED    DESIGN
+F20     Failure Recovery Path                   REQUIRED    DESIGN
+FA-FO   15 additional fixes                     varies      varies
+```
 
 ---
 
-## ⚖️ LICENSE
+## ⚖️ License
 
 **MIT** — see [LICENSE](LICENSE) for details.
 
 ---
 
 <p align="center">
-  <sub>⚛ QTA Simulation Toolkit · v3.1.0 · Pre-experimental conditional validation framework</sub><br>
+  <sub>⚛ QTA Simulation Toolkit · v3.1.0</sub><br>
+  <sub>Pre-experimental conditional validation framework for NV/He-3 quantum sensing at millikelvin temperatures</sub><br>
   <sub>⚠️  No working hardware is claimed. No breakthrough is asserted.</sub>
 </p>
-```
-
----
-
-## 🚀 NOW RUN IT
-
-```bash
-python run.py          # Full simulation + rich dashboard
-python run.py --bottleneck  # Focus on bottleneck analysis
-```

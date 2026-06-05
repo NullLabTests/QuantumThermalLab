@@ -1,9 +1,9 @@
 """Engineering readiness gates and fixes registry."""
 
 from .constants import (
-    BLOCKING, gate_status_3layer,
+    gate_status_3layer,
 )
-from .model import Gate, CURRENT_CHAMBER, CURRENT_MODE_B
+from .model import Gate, CURRENT_CHAMBER
 
 
 def _g(gid, name, mode, eq, comp, thresh, spec, inst, verif, reason_detail, fix, unit=""):
@@ -20,7 +20,6 @@ def engineering_readiness_gates():
     """Build E01-E14 and shielding/RTB gates."""
     gates = []
     _ch = CURRENT_CHAMBER
-    _mb = CURRENT_MODE_B
 
     gates.append(_g("E01", "250°C/48h UHV Bakeout", "MODE_A_BASELINE",
         "bakeout_executed=True; T_bake>=250C; t_bake>=48h",

@@ -3,7 +3,7 @@
 import math
 import random
 from multiprocessing import Pool, cpu_count
-from .constants import k_B, m_p, pi, mu_0, hbar, sigma_SB
+from .constants import k_B, m_p, pi, mu_0, hbar
 
 
 def _sample_one(args):

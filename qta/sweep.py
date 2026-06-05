@@ -1,10 +1,8 @@
 """Parameter sweeps and sensitivity analysis for QTA."""
 
-import csv, math, json
+import csv
 from pathlib import Path
-from .constants import k_B, m_p, pi, mu_0, hbar, sigma_SB
 from .model import make_mode_D_state, CHAMBER_STATE
-from .monte_carlo import run_mode_D_MC
 
 
 def sweep_tau_c(output_dir=None):

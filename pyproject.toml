@@ -5,10 +5,26 @@ description = "Pre-experimental feasibility framework for same-chamber NV/He-3 q
 readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.10"
-keywords = ["quantum", "sensing", "cryogenic", "NV-diamond", "helium-3", "LCVD", "simulation"]
+keywords = [
+    "quantum", "sensing", "cryogenic", "NV-diamond", "helium-3",
+    "LCVD", "simulation", "feasibility", "quantum-sensing",
+]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)",
+]
 
 [project.urls]
 Homepage = "https://github.com/NullLabTests/QuantumThermalLab"
+Source = "https://github.com/NullLabTests/QuantumThermalLab"
+BugTracker = "https://github.com/NullLabTests/QuantumThermalLab/issues"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

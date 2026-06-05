@@ -2,7 +2,6 @@
 
 import math
 from dataclasses import dataclass
-from typing import Optional, Union
 
 k_B: float = 1.380649e-23
 hbar: float = 1.054571817e-34

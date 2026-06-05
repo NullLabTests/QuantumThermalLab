@@ -2,7 +2,7 @@
 
 import math, random
 
-from .constants import k_B, m_p, pi, mu_0, hbar, sigma_SB
+from .constants import k_B, m_p, pi, mu_0, hbar
 
 def run_mode_D_MC(N=10000, seed=42):
     """

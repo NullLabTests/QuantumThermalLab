@@ -4,7 +4,7 @@ import math
 
 from .constants import (
     k_B, m_p, pi, sigma_SB, mu_0, hbar,
-    BLOCKING, DESIGN_SPECIFIED,
+    BLOCKING,
     gate_status_3layer, hw_status, eng_gate_status, eng_note,
 )
 from .model import (
@@ -305,8 +305,8 @@ def mode_D_gates(s, mode_D_blocked=False, sv=None):
 
     gates.append(Gate("D1", "LCVD Off / Mode D Status", "MODE_D_SENSE",
         "LCVD_on=False AND Mode B validated",
-        "BLOCKED" if mode_D_blocked else "PASS", None,
-        "PASS" if not mode_D_blocked else "BLOCKED",
+        BLOCKING if mode_D_blocked else "PASS", None,
+        "PASS" if not mode_D_blocked else BLOCKING,
         "MODE D BLOCKED — Mode B not passed." if mode_D_blocked else "LCVD off.",
         "Hardware IL-01.", ""))
 
@@ -314,7 +314,7 @@ def mode_D_gates(s, mode_D_blocked=False, sv=None):
     gates.append(Gate("D2", "Precursor Threshold (sv.P_CH4; FC-corrected)", "MODE_D_SENSE",
         "sv.P_CH4 < 5e-14 Pa at RGA port",
         sv.P_CH4_Pa, rga_thr,
-        "BLOCKED" if mode_D_blocked else (
+        BLOCKING if mode_D_blocked else (
             "UNKNOWN" if not CURRENT_CHAMBER.bakeout_done else
             ("PASS" if sv.P_CH4_Pa < rga_thr else "CONDITIONAL")),
         f"sv.P_CH4={sv.P_CH4_Pa:.2e}Pa. Threshold={rga_thr:.0e}Pa.",

@@ -1,6 +1,6 @@
 """Data models for the Quantum Thermal Architecture simulation."""
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 import math
 
 from .constants import (
@@ -24,7 +24,7 @@ class Gate:
 
     def to_dict(self):
         s = self.status
-        if s == "BLOCKED":
+        if s == BLOCKING:
             src_direct = "BLOCKED_PREREQUISITE"
         elif s == "UNKNOWN":
             src_direct = "UNKNOWN"
@@ -41,7 +41,7 @@ class Gate:
             "source_directness": src_direct,
             "can_PASS_now": "NO",
             "required_measurement": "see validation_matrix.csv",
-            "blocked_by": "see status_reason" if s == "BLOCKED" else "N/A",
+            "blocked_by": "see status_reason" if s == BLOCKING else "N/A",
             "notes": "FORECAST_ONLY; can_PASS_now=NO"
         }
 
